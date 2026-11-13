@@ -6,244 +6,671 @@
 
 <!-- ===================================================================
      EDITING GUIDE
+     Pages are tabs in this one file: Research (home), People,
+     Projects (Work in Progress), Opportunities, Contact. Each is a
+     <section class="page" data-route="...">.
      1. Lab name / description → search "EDIT:identity"
-     2. Contact links          → search "EDIT:contact"
      3. Research topics        → search "EDIT:topic", copy a whole
-                                 <article class="topic"> block
-     4. Work-in-progress cards → search "EDIT:project", copy a whole
+                                 <article class="topic"> block, give it
+                                 a new id="area-N", and add a matching
+                                 <a href="#area-N"> in <nav class="area-nav">
+     4. Publications           → inside a topic, copy a whole <li> in
+                                 <ul class="pubs">. Figure = <img> in
+                                 class="fig"; links go in "pub-links"
+     5. Work-in-progress cards → search "EDIT:project", copy a whole
                                  <article class="card"> block
-     5. Fill a OneDrive link   → search "ONEDRIVE", replace href="#"
+     6. Fill a OneDrive link   → search "ONEDRIVE", replace href="#"
+     7. People                 → search "EDIT:people". Photos load live:
+                                 PI from his homepage, students from
+                                 https://github.com/<username>.png
      Save, push to GitHub, live in a minute or two.
      =================================================================== -->
 
 <title>Kent State University AI Lab</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:wght@400;500;600;700&amp;family=IBM+Plex+Mono:wght@400;500&amp;display=swap">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:opsz,wght@8..60,400;8..60,600;8..60,700&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;family=IBM+Plex+Mono:wght@400;500;600&amp;display=swap">
 <style>
-/* Layout: single reading column; research topics stacked, WIP work as cards. */
+/* Layout: navy top bar with tabs (hash-routed pages), white body, navy masthead on Research. */
 :root{
-  --bg:#f6f7fa; --surface:#ffffff; --surface-2:#eef1f6;
-  --fg:#161b26; --muted:#5a6475; --line:#dfe4ec;
-  --accent:#2f52e0;
-  --s-wip:#9c5f14; --s-wip-bg:#fdf3e3;
-  --s-done:#0e7490; --s-done-bg:#e3f4f8;
-  --s-pub:#2f6b35; --s-pub-bg:#e8f4e9;
+  --bg:#ffffff; --surface:#ffffff; --surface-2:#f4f6f9; --surface-3:#eef2f7;
+  --fg:#0f172a; --muted:#475467; --line:#e2e7ef; --line-2:#edf1f6;
+  --navy:#002664; --on-navy:#ffffff; --on-navy-muted:#c3cfe2; --on-navy-accent:#7fa9ec;
+  --accent:#1d4f9c; --num:#a9b6cc; --card-rule:#002664;
+  --btn-bg:#002664; --btn-fg:#ffffff; --btn-hover-bg:#1d4f9c;
+  --soft-bg:#e8eef9; --soft-fg:#0b2f6b; --soft-line:#d2ddf0; --btn-line:#d3dbe8; --label:#002664; --sky-1:#062e6e; --sky-2:#001c4c; --bar-bg:rgba(255,255,255,.96);
+  --shadow:0 1px 2px rgba(16,24,40,.04),0 4px 14px rgba(16,24,40,.06);
+  --shadow-h:0 2px 4px rgba(16,24,40,.06),0 10px 28px rgba(16,24,40,.10);
+  --s-wip:#1d4f9c; --s-done:#0e6a80; --s-pub:#2d6a35;
+  --font-serif:"Source Serif 4","Iowan Old Style","Palatino Linotype",Georgia,serif;
   --font-sans:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
   --font-mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
   color-scheme:light;
 }
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
-  --bg:#0f131c; --surface:#161c28; --surface-2:#1d2533;
-  --fg:#e6eaf2; --muted:#98a3b8; --line:#28313f;
-  --accent:#7d9bff;
-  --s-wip:#e0a455; --s-wip-bg:#2a2414;
-  --s-done:#4fc3d7; --s-done-bg:#10303a;
-  --s-pub:#7fc088; --s-pub-bg:#16301a;
+  --bg:#0b0f16; --surface:#111722; --surface-2:#161d29; --surface-3:#1b2433;
+  --fg:#e6e9ef; --muted:#9aa4b4; --line:#242d3a; --line-2:#1b2330;
+  --navy:#0d1e3a; --on-navy-muted:#a9b8cf;
+  --accent:#8fb1f4; --num:#3c4a61; --card-rule:#4d6fa8;
+  --btn-bg:#8fb1f4; --btn-fg:#0b0f16; --btn-hover-bg:#b4cbf8;
+  --soft-bg:#18294a; --soft-fg:#cfe0ff; --soft-line:#28406a; --btn-line:#2c3748; --label:#c9d6ee; --sky-1:#142f5c; --sky-2:#07122a; --bar-bg:rgba(11,15,22,.96);
+  --shadow:0 1px 2px rgba(0,0,0,.3); --shadow-h:0 6px 20px rgba(0,0,0,.4);
+  --s-wip:#8fb1f4; --s-done:#5cc4d8; --s-pub:#82c38b;
   color-scheme:dark;
 }}
 :root[data-theme="dark"]{
-  --bg:#0f131c; --surface:#161c28; --surface-2:#1d2533;
-  --fg:#e6eaf2; --muted:#98a3b8; --line:#28313f;
-  --accent:#7d9bff;
-  --s-wip:#e0a455; --s-wip-bg:#2a2414;
-  --s-done:#4fc3d7; --s-done-bg:#10303a;
-  --s-pub:#7fc088; --s-pub-bg:#16301a;
+  --bg:#0b0f16; --surface:#111722; --surface-2:#161d29; --surface-3:#1b2433;
+  --fg:#e6e9ef; --muted:#9aa4b4; --line:#242d3a; --line-2:#1b2330;
+  --navy:#0d1e3a; --on-navy-muted:#a9b8cf;
+  --accent:#8fb1f4; --num:#3c4a61; --card-rule:#4d6fa8;
+  --btn-bg:#8fb1f4; --btn-fg:#0b0f16; --btn-hover-bg:#b4cbf8;
+  --soft-bg:#18294a; --soft-fg:#cfe0ff; --soft-line:#28406a; --btn-line:#2c3748; --label:#c9d6ee; --sky-1:#142f5c; --sky-2:#07122a; --bar-bg:rgba(11,15,22,.96);
+  --shadow:0 1px 2px rgba(0,0,0,.3); --shadow-h:0 6px 20px rgba(0,0,0,.4);
+  --s-wip:#8fb1f4; --s-done:#5cc4d8; --s-pub:#82c38b;
   color-scheme:dark;
 }
 
 *{box-sizing:border-box}
-body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--font-sans);
-     font-size:15px;line-height:1.65;-webkit-font-smoothing:antialiased}
+:root{--nav-h:70px}
+html{scroll-padding-top:88px}
+body{margin:0;overflow-x:clip;background:var(--bg);color:var(--fg);font-family:var(--font-sans);
+     font-size:16.5px;line-height:1.65;-webkit-font-smoothing:antialiased;
+     display:flex;flex-direction:column;min-height:100vh}
 img{max-width:100%}
+p,li,h1,h2,h3,h4,.pubs .t{text-wrap:pretty}
+a{color:var(--accent)}
 [hidden]{display:none!important}
-.wrap{max-width:880px;margin:0 auto;padding-inline:20px;padding-block:0 80px}
+:focus-visible{outline:2px solid var(--on-navy-accent);outline-offset:2px}
+.wrap{max-width:1120px;margin:0 auto;padding-inline:32px;width:100%}
+.ico{width:1em;height:1em;flex:0 0 auto;vertical-align:-.12em}
 
-/* ---- header ---- */
-header{padding-block:56px 34px;border-bottom:1px solid var(--line)}
-h1{font-size:clamp(27px,4.8vw,38px);margin:0 0 10px;font-weight:600;letter-spacing:-.025em;
-   text-wrap:balance}
-.role{font-size:16.5px;color:var(--muted);margin:0 0 22px;max-width:64ch}
-.links{display:flex;flex-wrap:wrap;gap:8px}
-.links a{display:inline-flex;align-items:center;font-size:13.5px;text-decoration:none;
-  color:var(--fg);background:var(--surface);border:1px solid var(--line);
-  border-radius:6px;padding:6px 12px;transition:border-color .15s,color .15s}
-.links a:hover{border-color:var(--accent);color:var(--accent)}
-.links a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+/* ---- pages (hash tabs). Without JS every page shows, stacked. ---- */
+body.js .page{display:none}
+body.js[data-page="research"] .page[data-route="research"],
+body.js[data-page="people"]   .page[data-route="people"],
+body.js[data-page="projects"] .page[data-route="projects"],
+body.js[data-page="opportunities"] .page[data-route="opportunities"],
+body.js[data-page="contact"]  .page[data-route="contact"]{display:block}
 
-/* ---- sections ---- */
-section{padding-block:44px 0}
-h2{font-size:13px;margin:0 0 8px;font-weight:600;color:var(--muted);
-   text-transform:uppercase;letter-spacing:.09em}
-.sec-note{font-size:14px;color:var(--muted);margin:0 0 26px;max-width:64ch}
+/* ---- top bar ---- */
+.topnav{position:sticky;top:0;z-index:20;background:var(--navy);border-bottom:1px solid rgba(255,255,255,.08)}
+.topnav-in{display:flex;align-items:center;justify-content:space-between;gap:12px 24px;min-height:68px;flex-wrap:wrap}
+.brand{display:flex;align-items:center;gap:16px;text-decoration:none;color:var(--on-navy)}
+.brand img{display:block;height:38px;width:auto}
+.brand .ksu-fallback{font-family:var(--font-serif);font-weight:600;font-size:17px}
+.brand-div{width:1px;height:30px;background:rgba(255,255,255,.3)}
+.brand-lab{font-family:var(--font-serif);font-weight:600;font-size:20px;letter-spacing:-.005em;white-space:nowrap}
+.navlinks{display:flex;gap:30px}
+.navlinks a{font-size:14.5px;font-weight:500;text-transform:uppercase;letter-spacing:.09em;
+  color:var(--on-navy-muted);text-decoration:none;padding-block:23px 21px;border-bottom:2px solid transparent;
+  transition:color .15s,border-color .15s}
+.navlinks a:hover{color:#fff}
+.navlinks a.active{color:#fff;border-bottom-color:var(--on-navy-accent)}
+
+/* ---- masthead (Research page) ---- */
+header.hero{position:relative;overflow:hidden;color:var(--on-navy);
+  background:radial-gradient(130% 150% at 60% 0%,var(--sky-1) 0%,var(--navy) 55%,var(--sky-2) 100%)}
+.hero-in{position:relative;z-index:1;padding-block:76px 150px}
+.sky{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.sky .st{animation:twinkle 4s ease-in-out infinite}
+@keyframes twinkle{0%,100%{opacity:var(--o)}50%{opacity:calc(var(--o) * .45)}}
+@media (prefers-reduced-motion:reduce){.sky .st{animation:none}}
+h1{font-family:var(--font-serif);font-size:clamp(32px,4.6vw,54px);line-height:1.1;margin:0;
+   font-weight:600;letter-spacing:-.018em;color:#fff}
+.hero-pi{margin:16px 0 0;font-size:20px;color:var(--on-navy-muted);letter-spacing:.01em}
+.hero-pi a{font-family:var(--font-serif);font-size:25px;font-weight:600;color:#fff;text-decoration:none;
+  border-bottom:1px solid rgba(255,255,255,.35);padding-bottom:1px;transition:border-color .15s}
+.hero-pi a{position:relative}
+.hero-pi a::after{content:"↗";position:absolute;left:100%;bottom:4px;padding-left:8px;font-family:var(--font-sans);font-size:15px;opacity:0;transition:opacity .15s}
+.hero-pi a:hover{border-bottom-color:#fff}
+.hero-pi a:hover::after{opacity:.75}
+.hero-pi::after{content:"";display:block;width:64px;height:3px;background:var(--on-navy-accent);margin:28px 0 26px}
+.role{font-size:clamp(17.5px,1.9vw,20.5px);line-height:1.55;font-weight:600;color:#fff;margin:0;max-width:880px}
+.links{display:flex;flex-wrap:wrap;gap:10px}
+.links a{display:inline-flex;align-items:center;gap:8px;font-size:14.5px;font-weight:500;text-decoration:none;
+  color:#fff;border:1px solid rgba(255,255,255,.32);border-radius:8px;padding:10px 18px;
+  transition:background .15s,color .15s,border-color .15s}
+.links a::after{content:"↗";font-size:13px;opacity:.7}
+.links a:hover{background:#fff;color:#002664;border-color:#fff}
+
+/* ---- sunrise: real NASA SDO image (AIA 171 Å, public domain), rising from the bottom edge of the masthead ---- */
+.sunrise{position:absolute;z-index:0;width:760px;height:760px;left:74%;top:100%;transform:translate(-50%,-31%);
+  pointer-events:none;mix-blend-mode:screen}
+.sunrise::before{content:"";position:absolute;inset:-22%;border-radius:50%;
+  background:radial-gradient(circle closest-side,rgba(255,196,110,.30),rgba(255,168,70,.12) 55%,rgba(255,150,60,0) 78%)}
+.sunrise img{position:relative;display:block;width:100%;height:100%;
+  -webkit-mask:radial-gradient(circle closest-side,#000 78%,rgba(0,0,0,.5) 84%,transparent 90%);
+          mask:radial-gradient(circle closest-side,#000 78%,rgba(0,0,0,.5) 84%,transparent 90%);
+  filter:saturate(1.35) contrast(1.15) brightness(1.1);animation:sun-turn 360s linear infinite}
+@keyframes sun-turn{to{transform:rotate(360deg)}}
+@media (prefers-reduced-motion:reduce){.sunrise img{animation:none}}
+@media (max-width:860px){.sunrise{width:520px;height:520px;left:70%}}
+@media (max-width:680px){.sunrise{width:420px;height:420px;left:62%;transform:translate(-50%,-27%)}}
+
+/* ---- page body ---- */
+main{flex:1 0 auto}
+section{padding-top:64px}
+section > h2{font-family:var(--font-serif);font-size:36px;line-height:1.2;font-weight:600;
+   letter-spacing:-.014em;margin:0 0 10px}
+section > h2::after{content:"";display:block;width:48px;height:3px;background:var(--navy);margin-top:14px}
+.sec-note{font-size:16.5px;color:var(--muted);margin:0 0 26px}
+body.js:not([data-page="research"]) main > section.page{padding-top:44px}
 
 /* ---- research topics ---- */
-.topic{padding-block:22px;border-top:1px solid var(--line)}
-.topic:first-of-type{border-top:0;padding-top:4px}
-.topic h3{font-size:17.5px;margin:0 0 6px;font-weight:600;letter-spacing:-.01em}
-.topic p{margin:0 0 14px;color:var(--muted);font-size:14.5px;max-width:66ch}
-.pubs{list-style:none;margin:0;padding:0;display:grid;gap:9px}
-.pubs li{display:flex;gap:12px;align-items:baseline;font-size:14px;min-width:0}
-.pubs .venue{font-family:var(--font-mono);font-size:11.5px;font-weight:500;color:var(--accent);
-  background:var(--surface-2);border-radius:4px;padding:2px 7px;white-space:nowrap;
-  flex:0 0 auto;min-width:88px;text-align:center}
-.pubs .t{min-width:0}
+.topic{padding-top:56px}
+/* area header: running-head style bar, pinned under the top nav while you scroll that area */
+.topic-bar{position:sticky;top:var(--nav-h);z-index:5;display:flex;align-items:baseline;justify-content:space-between;gap:20px;
+  background:var(--bar-bg);border-top:3px solid var(--label);border-bottom:1px solid var(--line);padding:14px 0 13px}
+.topic .topic-bar h3{color:var(--label);margin:0;font-size:26px}
+/* when pinned: becomes a full-width strip that continues the top nav (no stray rules) */
+.topic-bar::before{content:"";position:absolute;top:0;bottom:0;left:50%;width:100vw;transform:translateX(-50%);z-index:-1;
+  background:var(--bar-bg);border-bottom:1px solid var(--line);box-shadow:0 8px 16px -14px rgba(0,20,60,.45);opacity:0;transition:opacity .15s}
+.topic-bar.stuck{border-top-color:transparent;border-bottom-color:transparent}
+.topic-bar.stuck::before{opacity:1}
+.topic-count{font-family:var(--font-mono);font-size:12.5px;letter-spacing:.04em;color:var(--muted);white-space:nowrap}
+.topic .topic-desc{margin:16px 0 22px;max-width:80ch}
+/* jump list: a quiet table of contents */
+.area-nav{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));column-gap:36px;margin:4px 0 0;border-top:1px solid var(--line)}
+.area-nav a{display:flex;justify-content:space-between;align-items:baseline;gap:14px;padding:13px 2px 13px 0;
+  border-bottom:1px solid var(--line);font-family:var(--font-serif);font-size:19.5px;font-weight:600;line-height:1.35;
+  color:var(--fg);text-decoration:none;transition:color .15s,border-color .15s}
+.area-nav a:hover{color:var(--accent);border-bottom-color:var(--accent)}
+.topic h3{font-family:var(--font-serif);font-size:28px;line-height:1.28;margin:0 0 10px;font-weight:600;letter-spacing:-.01em}
+.topic p{margin:0 0 24px;color:var(--muted);font-size:16.5px}
+
+/* ---- publication cards ---- */
+.pubs{list-style:none;margin:0;padding:0;display:grid;gap:14px}
+.pubs li{display:grid;grid-template-columns:280px minmax(0,1fr);gap:24px;align-items:center;
+  background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:14px;
+  box-shadow:var(--shadow);transition:box-shadow .2s,border-color .2s}
+.pubs li.nofig{grid-template-columns:minmax(0,1fr);padding:18px 24px}
+.pubs li:hover{box-shadow:var(--shadow-h);border-color:#cfd8e6}
+.fig{display:block;position:relative;aspect-ratio:16/10;border-radius:8px;overflow:hidden;
+  background:#fff;border:1px solid var(--line-2);cursor:zoom-in}
+.fig img{display:block;width:100%;height:100%;object-fit:contain;padding:8px;transition:transform .35s ease}
+.fig.wide img{object-fit:cover;object-position:center;padding:0}
+.fig:hover img{transform:scale(1.04)}
+.pub-body{min-width:0;padding-right:6px;display:grid;grid-template-columns:auto minmax(0,1fr) auto;column-gap:14px;align-items:center}
+.pubs .venue{align-self:start}
+.pubs li.nofig .venue{align-self:center;margin-top:0}
+/* with a figure: venue badge sits above the title, left-aligned with it */
+.pubs li:not(.nofig) .pub-body{grid-template-columns:minmax(0,1fr) auto;row-gap:8px}
+.pubs li:not(.nofig) .venue{grid-column:1;grid-row:1;justify-self:start}
+.pubs li:not(.nofig) .t{grid-column:1;grid-row:2}
+.pubs li:not(.nofig) .pub-links{grid-column:2;grid-row:1 / span 2}
+.pubs .venue{display:inline-block;font-family:var(--font-mono);font-size:13px;font-weight:600;letter-spacing:.02em;
+  color:#fff;background:var(--navy);border-radius:6px;padding:3px 10px;margin-top:2px;white-space:nowrap}
+.pubs .t{display:block;font-family:var(--font-serif);font-size:18.5px;line-height:1.38;font-weight:600;color:var(--fg);letter-spacing:-.005em}
+.pub-links{display:flex;flex-wrap:nowrap;gap:8px;justify-content:flex-end;padding-left:12px}
+/* same look as the People / Projects buttons */
+.pub-links a{display:inline-flex;align-items:center;gap:7px;font-size:14px;font-weight:500;text-decoration:none;white-space:nowrap;
+  color:var(--accent);background:var(--surface);border:1px solid var(--btn-line);border-radius:8px;padding:6px 13px;
+  box-shadow:0 1px 2px rgba(16,24,40,.06);transition:background .15s,color .15s,border-color .15s}
+.pub-links .ico{width:13px;height:13px}
+.pub-links a:hover{background:var(--btn-bg);border-color:var(--btn-bg);color:var(--btn-fg)}
+/* figure lightbox */
+.lb{position:fixed;inset:0;z-index:60;display:none;align-items:center;justify-content:center;padding:5vh 5vw;
+  background:rgba(8,14,26,.84);cursor:zoom-out}
+.lb.open{display:flex}
+.lb img{max-width:100%;max-height:100%;background:#fff;border-radius:10px;padding:14px;box-shadow:0 20px 60px rgba(0,0,0,.45)}
 
 /* ---- WIP cards ---- */
-.grid{display:grid;gap:16px}
-.card{background:var(--surface);border:1px solid var(--line);border-radius:9px;
-      padding:20px 22px;min-width:0}
-.card-top{display:flex;align-items:flex-start;gap:12px;flex-wrap:wrap;margin-bottom:8px}
-.card h3{font-size:18px;margin:0;font-weight:600;letter-spacing:-.01em;flex:1 1 auto;min-width:0}
-.chip{font-size:11.5px;font-weight:600;padding:3px 9px;border-radius:20px;white-space:nowrap;
-      letter-spacing:.02em;flex:0 0 auto}
-.c-wip{color:var(--s-wip);background:var(--s-wip-bg)}
-.c-done{color:var(--s-done);background:var(--s-done-bg)}
-.c-pub{color:var(--s-pub);background:var(--s-pub-bg)}
-.card p{margin:0 0 14px;color:var(--muted);font-size:14.5px;max-width:66ch}
-.tags{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 14px}
-.tag{font-family:var(--font-mono);font-size:11.5px;color:var(--muted);
-     background:var(--surface-2);border-radius:4px;padding:2px 7px}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:22px}
+.grid > .card:last-child:nth-child(odd){grid-column:1 / -1}
+.card{display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--line);
+      border-radius:12px;padding:26px 28px 22px;min-width:0;box-shadow:var(--shadow)}
+.card-top{display:flex;flex-direction:column-reverse;align-items:flex-start;gap:10px;margin-bottom:12px}
+.card h3{font-family:var(--font-serif);font-size:22px;line-height:1.3;margin:0;font-weight:600;letter-spacing:-.01em}
+.chip{display:inline-flex;align-items:center;gap:8px;font-family:var(--font-mono);font-size:11.5px;
+      font-weight:500;text-transform:uppercase;letter-spacing:.1em;white-space:nowrap}
+.chip::before{content:"";width:7px;height:7px;border-radius:50%;background:currentColor}
+.c-wip{color:var(--s-wip)} .c-done{color:var(--s-done)} .c-pub{color:var(--s-pub)}
+.card p{margin:0 0 16px;color:var(--muted);font-size:16px}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 18px}
+.tag{font-family:var(--font-mono);font-size:12px;color:var(--muted);background:var(--surface-2);border-radius:6px;padding:2px 9px}
 .acts{display:flex;flex-wrap:wrap;gap:8px}
-.acts a{font-size:13px;text-decoration:none;color:var(--accent);border:1px solid var(--line);
-  border-radius:6px;padding:5px 11px;transition:background .15s,border-color .15s}
-.acts a:hover{background:var(--surface-2);border-color:var(--accent)}
-.acts a:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-.acts a[href="#"]{color:var(--muted);pointer-events:none;opacity:.55}
-.acts a .ext{font-size:11px;opacity:.65}
+.card .acts{margin-top:auto;padding-top:16px;border-top:1px solid var(--line-2)}
+.acts a{display:inline-flex;align-items:center;gap:7px;font-size:14px;font-weight:500;text-decoration:none;
+  color:var(--accent);background:var(--surface);border:1px solid var(--line);border-radius:8px;
+  padding:6px 13px;transition:background .15s,color .15s,border-color .15s}
+.acts a:hover{background:var(--btn-bg);color:var(--btn-fg);border-color:var(--btn-bg)}
+.acts a[href="#"]{color:var(--muted);pointer-events:none;opacity:.5;border-style:dashed}
+.acts a .ext{font-family:var(--font-mono);font-size:11px;opacity:.7}
+.hint{font-size:14.5px;color:var(--muted);background:var(--surface-2);border-radius:10px;
+      padding:16px 20px;margin-top:24px}
+.hint strong{color:var(--fg)}
 
-.hint{font-size:13px;color:var(--muted);background:var(--surface-2);
-      border:1px solid var(--line);border-radius:7px;padding:12px 15px;margin-top:18px}
+/* ---- people ---- */
+.group-title{font-family:var(--font-sans);font-size:15.5px;font-weight:600;text-transform:uppercase;
+  letter-spacing:.1em;color:var(--label);margin:40px 0 18px;display:flex;align-items:center;gap:16px}
+.group-title::after{content:"";flex:1;height:1px;background:var(--line)}
+.profile + .group-title{margin-top:24px}
+.profile{display:grid;grid-template-columns:auto minmax(0,1fr);gap:40px;align-items:center;
+  background:linear-gradient(180deg,var(--surface-2),var(--surface));border-radius:18px;padding:28px}
+.profile .photo{display:block;width:280px;height:280px;object-fit:cover;object-position:center top;
+  border-radius:14px;background:var(--surface-3);box-shadow:var(--shadow)}
+.profile.student{padding:22px 26px;gap:32px}
+.profile.student .photo{width:170px;height:170px;border-radius:12px}
+.profile h3{font-family:var(--font-serif);font-size:36px;line-height:1.12;font-weight:600;letter-spacing:-.016em;margin:0 0 10px}
+.profile.student h3{font-size:25px;margin-bottom:6px}
+.profile.student .p-title{font-size:16px}
+.profile.student .p-aff{font-size:15px}
+.profile.student .p-mail{font-size:13.5px;margin-top:12px}
+.profile.student .btns{margin-top:16px}
+.p-title{font-size:18px;margin:0;color:var(--fg)}
+.p-aff{font-size:16.5px;margin:2px 0 0;color:var(--muted)}
+.p-dot{color:var(--num);margin:0 4px}
+.p-since{color:var(--muted)}
+.p-mail{display:inline-flex;align-items:center;gap:9px;margin:16px 0 0;font-size:16px;color:var(--fg);text-decoration:none;
+  font-family:var(--font-mono);font-size:14.5px}
+.p-mail .ico{color:var(--accent);width:17px;height:17px}
+.p-mail:hover{color:var(--accent)}
+.btns{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+/* same look as the project-card links (.acts a) */
+.btn{display:inline-flex;align-items:center;gap:7px;font-size:14.5px;font-weight:500;text-decoration:none;
+  color:var(--accent);background:var(--surface);border:1px solid var(--btn-line);border-radius:8px;
+  padding:7px 14px;box-shadow:0 1px 2px rgba(16,24,40,.06);transition:background .15s,color .15s,border-color .15s}
+.btn .ico{width:13px;height:13px}
+.btn:hover{background:var(--btn-bg);color:var(--btn-fg);border-color:var(--btn-bg)}
 
-footer{margin-top:56px;padding-top:20px;border-top:1px solid var(--line);
-       font-size:13px;color:var(--muted)}
-footer a{color:var(--accent)}
-@media (max-width:560px){
-  header{padding-block:40px 26px}
-  .card{padding:17px 18px}
-  .pubs li{flex-direction:column;gap:3px}
-  .pubs .venue{min-width:0;text-align:left;align-self:flex-start}
+/* ---- opportunities / contact ---- */
+.join h3{font-family:var(--font-serif);font-size:28px;line-height:1.25;font-weight:600;margin:30px 0 14px;letter-spacing:-.01em}
+.join p{color:var(--muted);font-size:17.5px;margin:0 0 26px}
+.join .acts a{background:var(--btn-bg);border-color:var(--btn-bg);color:var(--btn-fg);font-weight:600;padding:11px 18px;border-radius:10px}
+.join .acts a:hover{background:var(--btn-hover-bg);border-color:var(--btn-hover-bg)}
+.contact-wrap{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,6fr);gap:44px;align-items:start;margin-top:30px}
+.contact-list{margin:0;border-top:2px solid var(--label)}
+.c-row{display:grid;grid-template-columns:110px minmax(0,1fr);gap:18px;padding:18px 0;border-bottom:1px solid var(--line)}
+.c-row dt{font-family:var(--font-mono);font-size:12.5px;font-weight:500;text-transform:uppercase;letter-spacing:.1em;color:var(--muted);padding-top:3px}
+.c-row dd{margin:0;font-size:17px;line-height:1.6}
+.c-row a{text-decoration:none}
+.c-row a:hover{text-decoration:underline}
+.c-sub{display:block;color:var(--muted);font-size:15.5px}
+.map{margin:0}
+.map iframe{display:block;width:100%;height:400px;border:1px solid var(--line);border-radius:12px;background:var(--surface-2)}
+.map figcaption{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-top:10px;font-size:14px;color:var(--muted)}
+.map figcaption a{display:inline-flex;align-items:center;gap:6px;font-weight:500;text-decoration:none}
+.map figcaption .ico{width:13px;height:13px}
+
+/* ---- footer ---- */
+.site-foot{margin-top:88px;border-top:1px solid var(--line);color:var(--muted)}
+.foot-in{display:flex;justify-content:space-between;align-items:center;gap:12px 24px;flex-wrap:wrap;
+  padding-block:26px 40px;font-size:14px}
+.foot-in a{color:var(--muted);text-decoration:none;display:inline-flex;align-items:center;gap:8px}
+.foot-in a:hover{color:var(--accent)}
+.foot-in .ico{width:16px;height:16px;vertical-align:0}
+.foot-left{display:inline-flex;align-items:center;flex-wrap:wrap;gap:6px 10px;line-height:1.4}
+.foot-in a{line-height:1.4}
+
+@media (max-width:1000px){
+  .navlinks{gap:24px}
+  .pub-body{grid-template-columns:auto minmax(0,1fr);row-gap:12px}
+  .pub-links{grid-column:1 / -1;justify-content:flex-start;padding-left:0;flex-wrap:wrap}
+  .pubs li:not(.nofig) .pub-body{grid-template-columns:minmax(0,1fr)}
+  .pubs li:not(.nofig) .pub-links{grid-column:1;grid-row:3}
+}
+@media (max-width:860px){
+  .area-nav{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .grid{grid-template-columns:minmax(0,1fr)}
+  .grid > .card:last-child:nth-child(odd){grid-column:auto}
+  .contact-wrap{grid-template-columns:minmax(0,1fr);gap:28px}
+  .map iframe{height:320px}
+}
+@media (max-width:680px){
+  :root{--nav-h:87px}
+  body{font-size:16px}
+  .wrap{padding-inline:20px}
+  .topnav-in{padding-top:12px;gap:4px}
+  .brand img{height:28px}
+  .brand-div{height:22px}
+  .brand-lab{font-size:16px}
+  .navlinks{width:100%;justify-content:space-between;gap:6px;overflow-x:auto;scrollbar-width:none}
+  .navlinks::-webkit-scrollbar{display:none}
+  .navlinks a{font-size:11.5px;letter-spacing:.01em;padding-block:12px 10px;white-space:nowrap}
+  .hero-in{padding-block:48px 120px}
+  section{padding-top:44px}
+  section > h2{font-size:29px}
+  .topic{padding-top:32px}
+  .area-nav{grid-template-columns:minmax(0,1fr)}
+  .area-nav a{font-size:17.5px;padding:12px 2px 12px 0}
+  .topic-count{display:none}
+  .topic .topic-bar h3{font-size:20px}
+  .topic-bar{padding:11px 0 10px}
+  .topic h3{font-size:23px}
+  .pubs li{grid-template-columns:minmax(0,1fr);gap:14px}
+  .pub-body{display:block}
+  .pubs .venue{margin:0 0 8px}
+  .pub-links{margin-top:12px}
+  .card{padding:20px 20px 18px}
+  .profile{grid-template-columns:minmax(0,1fr);gap:22px;padding:20px}
+  .profile .photo,.profile.student .photo{width:100%;height:auto;aspect-ratio:1/1;max-width:300px}
+  .profile h3{font-size:30px}
 }
 </style>
 </head>
 <body>
 
-<div class="wrap">
+<nav class="topnav" aria-label="Main">
+  <div class="wrap topnav-in">
+    <a class="brand" href="./">
+      <img src="https://www-s3-live.kent.edu/s3fs-root/s3fs-public/kent_state_university%20Horizontal_124-White-cpm.png?VersionId=9iaQKGe82Nhbpa_g1OuNU0R_hl4ps7P8" alt="Kent State University" onerror="this.outerHTML='&lt;span class=&quot;ksu-fallback&quot;&gt;Kent State University&lt;/span&gt;'">
+      <span class="brand-div" aria-hidden="true"></span>
+      <span class="brand-lab">AI Lab</span>
+    </a>
+    <div class="navlinks">
+      <a href="#research">Research</a>
+      <a href="#people">People</a>
+      <a href="#projects">Projects</a>
+      <a href="#opportunities">Opportunities</a>
+      <a href="#contact">Contact</a>
+    </div>
+  </div>
+</nav>
 
-<header>
+<header class="hero page" data-route="research">
+<svg class="sky" viewBox="0 0 1440 520" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false"><defs><radialGradient id="sg"><stop offset="0" stop-color="#fff"/><stop offset=".25" stop-color="#dce8ff" stop-opacity=".9"/><stop offset="1" stop-color="#9dbcff" stop-opacity="0"/></radialGradient><filter id="neb" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="18"/></filter></defs><g><circle class="st" style="--o:0.41;animation-duration:4.0s;animation-delay:-2.8s" cx="118" cy="176" r="0.9" fill="#fff" opacity="0.41"/><circle class="st" style="--o:0.64;animation-duration:4.7s;animation-delay:-0.9s" cx="104" cy="6" r="1.4" fill="#fff" opacity="0.64"/><circle class="st" style="--o:0.74;animation-duration:4.7s;animation-delay:-5.1s" cx="51" cy="325" r="1.1" fill="#fff" opacity="0.74"/><circle class="st" style="--o:0.36;animation-duration:4.0s;animation-delay:-2.3s" cx="194" cy="413" r="0.8" fill="#fff" opacity="0.36"/><circle class="st" style="--o:0.44;animation-duration:5.5s;animation-delay:-1.9s" cx="1061" cy="110" r="1.0" fill="#fff" opacity="0.44"/><circle class="st" style="--o:0.36;animation-duration:4.0s;animation-delay:-1.1s" cx="1221" cy="373" r="1.0" fill="#fff" opacity="0.36"/><circle class="st" style="--o:0.5;animation-duration:4.3s;animation-delay:-0.5s" cx="1009" cy="480" r="0.9" fill="#fff" opacity="0.5"/><circle class="st" style="--o:0.42;animation-duration:4.2s;animation-delay:-3.0s" cx="248" cy="131" r="0.7" fill="#fff" opacity="0.42"/><circle class="st" style="--o:0.51;animation-duration:3.9s;animation-delay:-0.1s" cx="1116" cy="501" r="1.2" fill="#fff" opacity="0.51"/><circle class="st" style="--o:0.68;animation-duration:4.6s;animation-delay:-1.8s" cx="135" cy="47" r="1.4" fill="#fff" opacity="0.68"/><circle class="st" style="--o:0.58;animation-duration:3.8s;animation-delay:-1.4s" cx="1082" cy="165" r="1.0" fill="#fff" opacity="0.58"/><circle class="st" style="--o:0.71;animation-duration:5.1s;animation-delay:-0.9s" cx="557" cy="456" r="0.8" fill="#fff" opacity="0.71"/><circle class="st" style="--o:0.45;animation-duration:3.2s;animation-delay:-1.0s" cx="1074" cy="344" r="1.1" fill="#fff" opacity="0.45"/><circle class="st" style="--o:0.65;animation-duration:4.6s;animation-delay:-5.6s" cx="854" cy="31" r="0.8" fill="#fff" opacity="0.65"/><circle class="st" style="--o:0.72;animation-duration:4.5s;animation-delay:-5.9s" cx="1310" cy="474" r="1.0" fill="#fff" opacity="0.72"/><circle class="st" style="--o:0.52;animation-duration:5.3s;animation-delay:-3.9s" cx="24" cy="260" r="0.7" fill="#fff" opacity="0.52"/><circle class="st" style="--o:0.72;animation-duration:3.7s;animation-delay:-1.8s" cx="898" cy="153" r="0.7" fill="#fff" opacity="0.72"/><circle class="st" style="--o:0.35;animation-duration:3.9s;animation-delay:-1.8s" cx="207" cy="237" r="1.0" fill="#fff" opacity="0.35"/><circle class="st" style="--o:0.55;animation-duration:5.1s;animation-delay:-1.2s" cx="42" cy="446" r="1.4" fill="#fff" opacity="0.55"/><circle class="st" style="--o:0.58;animation-duration:3.4s;animation-delay:-5.3s" cx="263" cy="324" r="1.1" fill="#fff" opacity="0.58"/><circle class="st" style="--o:0.37;animation-duration:4.2s;animation-delay:-0.0s" cx="72" cy="491" r="1.2" fill="#fff" opacity="0.37"/><circle class="st" style="--o:0.54;animation-duration:3.5s;animation-delay:-1.2s" cx="474" cy="505" r="1.4" fill="#fff" opacity="0.54"/><circle class="st" style="--o:0.48;animation-duration:5.6s;animation-delay:-2.2s" cx="955" cy="257" r="1.4" fill="#fff" opacity="0.48"/><circle class="st" style="--o:0.64;animation-duration:5.2s;animation-delay:-2.7s" cx="214" cy="12" r="0.8" fill="#fff" opacity="0.64"/><circle class="st" style="--o:0.64;animation-duration:3.4s;animation-delay:-4.6s" cx="1397" cy="439" r="0.7" fill="#fff" opacity="0.64"/><circle class="st" style="--o:0.42;animation-duration:4.3s;animation-delay:-1.1s" cx="137" cy="318" r="1.2" fill="#fff" opacity="0.42"/><circle class="st" style="--o:0.73;animation-duration:4.2s;animation-delay:-3.4s" cx="1131" cy="465" r="1.4" fill="#fff" opacity="0.73"/><circle class="st" style="--o:0.44;animation-duration:5.8s;animation-delay:-2.9s" cx="1087" cy="232" r="1.4" fill="#fff" opacity="0.44"/><circle class="st" style="--o:0.44;animation-duration:5.7s;animation-delay:-0.3s" cx="1223" cy="202" r="0.7" fill="#fff" opacity="0.44"/><circle class="st" style="--o:0.7;animation-duration:4.3s;animation-delay:-2.0s" cx="1276" cy="112" r="1.1" fill="#fff" opacity="0.7"/><circle class="st" style="--o:0.61;animation-duration:5.8s;animation-delay:-5.1s" cx="1374" cy="204" r="1.1" fill="#fff" opacity="0.61"/><circle class="st" style="--o:0.57;animation-duration:3.4s;animation-delay:-3.3s" cx="1319" cy="339" r="1.0" fill="#fff" opacity="0.57"/><circle class="st" style="--o:0.51;animation-duration:3.5s;animation-delay:-5.1s" cx="895" cy="193" r="1.2" fill="#fff" opacity="0.51"/><circle class="st" style="--o:0.41;animation-duration:3.2s;animation-delay:-2.8s" cx="940" cy="423" r="0.9" fill="#fff" opacity="0.41"/><circle class="st" style="--o:0.53;animation-duration:4.9s;animation-delay:-0.6s" cx="1433" cy="241" r="0.9" fill="#fff" opacity="0.53"/><circle class="st" style="--o:0.55;animation-duration:4.8s;animation-delay:-5.4s" cx="1002" cy="42" r="1.1" fill="#fff" opacity="0.55"/><circle class="st" style="--o:0.68;animation-duration:3.3s;animation-delay:-5.3s" cx="961" cy="326" r="1.2" fill="#fff" opacity="0.68"/><circle class="st" style="--o:0.41;animation-duration:5.4s;animation-delay:-4.1s" cx="830" cy="480" r="1.2" fill="#fff" opacity="0.41"/><circle class="st" style="--o:0.49;animation-duration:5.7s;animation-delay:-0.7s" cx="1214" cy="25" r="0.8" fill="#fff" opacity="0.49"/><circle class="st" style="--o:0.43;animation-duration:4.9s;animation-delay:-1.0s" cx="1252" cy="421" r="1.4" fill="#fff" opacity="0.43"/><circle class="st" style="--o:0.74;animation-duration:5.3s;animation-delay:-1.7s" cx="1292" cy="65" r="1.4" fill="#fff" opacity="0.74"/><circle class="st" style="--o:0.43;animation-duration:4.4s;animation-delay:-0.7s" cx="1298" cy="264" r="1.1" fill="#fff" opacity="0.43"/><circle class="st" style="--o:0.36;animation-duration:4.4s;animation-delay:-3.1s" cx="749" cy="451" r="0.8" fill="#fff" opacity="0.36"/><circle class="st" style="--o:0.56;animation-duration:3.7s;animation-delay:-0.7s" cx="1342" cy="73" r="0.7" fill="#fff" opacity="0.56"/><circle class="st" style="--o:0.4;animation-duration:3.1s;animation-delay:-0.4s" cx="172" cy="516" r="1.4" fill="#fff" opacity="0.4"/><circle class="st" style="--o:0.56;animation-duration:4.9s;animation-delay:-1.0s" cx="233" cy="56" r="1.0" fill="#fff" opacity="0.56"/><circle class="st" style="--o:0.68;animation-duration:5.3s;animation-delay:-1.5s" cx="1354" cy="155" r="1.4" fill="#fff" opacity="0.68"/><circle class="st" style="--o:0.48;animation-duration:3.7s;animation-delay:-1.6s" cx="28" cy="20" r="0.7" fill="#fff" opacity="0.48"/><circle class="st" style="--o:0.43;animation-duration:5.3s;animation-delay:-2.1s" cx="592" cy="484" r="0.7" fill="#fff" opacity="0.43"/><circle class="st" style="--o:0.7;animation-duration:5.2s;animation-delay:-2.7s" cx="271" cy="429" r="0.7" fill="#fff" opacity="0.7"/><circle class="st" style="--o:0.36;animation-duration:3.7s;animation-delay:-3.9s" cx="246" cy="242" r="1.1" fill="#fff" opacity="0.36"/><circle class="st" style="--o:0.42;animation-duration:4.3s;animation-delay:-3.2s" cx="652" cy="506" r="0.7" fill="#fff" opacity="0.42"/><circle class="st" style="--o:0.73;animation-duration:3.5s;animation-delay:-4.8s" cx="1270" cy="504" r="0.8" fill="#fff" opacity="0.73"/><circle class="st" style="--o:0.63;animation-duration:4.1s;animation-delay:-5.5s" cx="1404" cy="15" r="0.8" fill="#fff" opacity="0.63"/><circle class="st" style="--o:0.47;animation-duration:5.8s;animation-delay:-4.4s" cx="123" cy="91" r="1.0" fill="#fff" opacity="0.47"/><circle class="st" style="--o:0.51;animation-duration:3.8s;animation-delay:-0.1s" cx="543" cy="517" r="0.7" fill="#fff" opacity="0.51"/><circle class="st" style="--o:0.61;animation-duration:5.2s;animation-delay:-4.4s" cx="318" cy="510" r="1.0" fill="#fff" opacity="0.61"/><circle class="st" style="--o:0.67;animation-duration:5.8s;animation-delay:-2.2s" cx="1360" cy="343" r="1.2" fill="#fff" opacity="0.67"/><circle class="st" style="--o:0.7;animation-duration:4.4s;animation-delay:-4.7s" cx="1362" cy="10" r="1.2" fill="#fff" opacity="0.7"/><circle class="st" style="--o:0.39;animation-duration:4.1s;animation-delay:-2.0s" cx="394" cy="408" r="1.0" fill="#fff" opacity="0.39"/><circle class="st" style="--o:0.73;animation-duration:5.6s;animation-delay:-1.3s" cx="820" cy="57" r="1.1" fill="#fff" opacity="0.73"/><circle class="st" style="--o:0.64;animation-duration:3.7s;animation-delay:-3.3s" cx="1039" cy="235" r="1.4" fill="#fff" opacity="0.64"/><circle class="st" style="--o:0.57;animation-duration:4.7s;animation-delay:-4.6s" cx="755" cy="416" r="1.0" fill="#fff" opacity="0.57"/><circle class="st" style="--o:0.42;animation-duration:5.0s;animation-delay:-0.1s" cx="1403" cy="166" r="0.8" fill="#fff" opacity="0.42"/><circle class="st" style="--o:0.58;animation-duration:4.8s;animation-delay:-4.7s" cx="1097" cy="77" r="1.0" fill="#fff" opacity="0.58"/><circle class="st" style="--o:0.65;animation-duration:3.5s;animation-delay:-5.8s" cx="43" cy="181" r="1.1" fill="#fff" opacity="0.65"/><circle class="st" style="--o:0.73;animation-duration:4.7s;animation-delay:-3.7s" cx="825" cy="448" r="0.7" fill="#fff" opacity="0.73"/><circle class="st" style="--o:0.7;animation-duration:3.7s;animation-delay:-2.4s" cx="963" cy="14" r="1.2" fill="#fff" opacity="0.7"/><circle class="st" style="--o:0.47;animation-duration:5.2s;animation-delay:-4.8s" cx="1438" cy="470" r="0.8" fill="#fff" opacity="0.47"/><circle class="st" style="--o:0.41;animation-duration:3.7s;animation-delay:-1.9s" cx="1435" cy="54" r="0.9" fill="#fff" opacity="0.41"/><circle class="st" style="--o:0.61;animation-duration:5.1s;animation-delay:-5.2s" cx="832" cy="193" r="1.4" fill="#fff" opacity="0.61"/><circle class="st" style="--o:0.64;animation-duration:3.9s;animation-delay:-1.9s" cx="1384" cy="510" r="1.2" fill="#fff" opacity="0.64"/><circle class="st" style="--o:0.62;animation-duration:5.7s;animation-delay:-0.2s" cx="787" cy="363" r="1.2" fill="#fff" opacity="0.62"/><circle class="st" style="--o:0.59;animation-duration:3.5s;animation-delay:-1.6s" cx="1137" cy="14" r="1.4" fill="#fff" opacity="0.59"/><circle class="st" style="--o:0.57;animation-duration:5.2s;animation-delay:-0.3s" cx="298" cy="96" r="0.7" fill="#fff" opacity="0.57"/><circle class="st" style="--o:0.66;animation-duration:5.5s;animation-delay:-5.9s" cx="18" cy="160" r="1.0" fill="#fff" opacity="0.66"/><circle class="st" style="--o:0.38;animation-duration:4.4s;animation-delay:-2.5s" cx="815" cy="520" r="0.7" fill="#fff" opacity="0.38"/><circle class="st" style="--o:0.51;animation-duration:3.4s;animation-delay:-6.0s" cx="896" cy="517" r="1.0" fill="#fff" opacity="0.51"/><circle class="st" style="--o:0.54;animation-duration:3.4s;animation-delay:-4.1s" cx="14" cy="514" r="0.7" fill="#fff" opacity="0.54"/><circle class="st" style="--o:0.49;animation-duration:3.4s;animation-delay:-3.1s" cx="10" cy="462" r="0.8" fill="#fff" opacity="0.49"/><circle class="st" style="--o:0.53;animation-duration:5.4s;animation-delay:-5.4s" cx="209" cy="472" r="0.7" fill="#fff" opacity="0.53"/><circle class="st" style="--o:0.48;animation-duration:5.4s;animation-delay:-4.7s" cx="396" cy="438" r="1.4" fill="#fff" opacity="0.48"/><circle class="st" style="--o:0.57;animation-duration:3.7s;animation-delay:-5.2s" cx="969" cy="61" r="1.0" fill="#fff" opacity="0.57"/><circle class="st" style="--o:0.71;animation-duration:3.4s;animation-delay:-1.6s" cx="534" cy="486" r="0.8" fill="#fff" opacity="0.71"/><circle class="st" style="--o:0.53;animation-duration:4.8s;animation-delay:-1.4s" cx="320" cy="0" r="0.7" fill="#fff" opacity="0.53"/><circle class="st" style="--o:0.39;animation-duration:4.6s;animation-delay:-2.1s" cx="1244" cy="292" r="1.1" fill="#fff" opacity="0.39"/><circle class="st" style="--o:0.36;animation-duration:4.6s;animation-delay:-0.2s" cx="830" cy="98" r="1.1" fill="#fff" opacity="0.36"/><circle class="st" style="--o:0.64;animation-duration:5.3s;animation-delay:-3.7s" cx="1043" cy="455" r="0.7" fill="#fff" opacity="0.64"/><circle class="st" style="--o:0.37;animation-duration:3.5s;animation-delay:-0.7s" cx="38" cy="53" r="1.1" fill="#fff" opacity="0.37"/><circle class="st" style="--o:0.65;animation-duration:3.1s;animation-delay:-0.7s" cx="122" cy="380" r="0.9" fill="#fff" opacity="0.65"/></g><g class="m45"><circle class="st" style="--o:0.37;animation-duration:4.4s;animation-delay:-4.3s" cx="555.6" cy="193.8" r="0.84" fill="#fff" opacity="0.37"/><circle class="st" style="--o:0.36;animation-duration:4.6s;animation-delay:-4.0s" cx="540.3" cy="195.9" r="0.77" fill="#fff" opacity="0.36"/><circle class="st" style="--o:0.43;animation-duration:5.9s;animation-delay:-1.0s" cx="540.1" cy="192.5" r="0.62" fill="#fff" opacity="0.43"/><circle class="st" style="--o:0.41;animation-duration:5.7s;animation-delay:-3.0s" cx="579.4" cy="193.5" r="0.76" fill="#fff" opacity="0.41"/><circle class="st" style="--o:0.33;animation-duration:3.7s;animation-delay:-0.9s" cx="570.7" cy="183.3" r="0.74" fill="#fff" opacity="0.33"/><circle class="st" style="--o:0.37;animation-duration:4.1s;animation-delay:-3.9s" cx="566.2" cy="200.1" r="0.71" fill="#fff" opacity="0.37"/><circle class="st" style="--o:0.45;animation-duration:3.0s;animation-delay:-0.4s" cx="576.3" cy="179.3" r="0.70" fill="#fff" opacity="0.45"/><circle class="st" style="--o:0.38;animation-duration:3.8s;animation-delay:-3.8s" cx="580.0" cy="186.4" r="0.58" fill="#fff" opacity="0.38"/><circle class="st" style="--o:0.39;animation-duration:5.0s;animation-delay:-2.6s" cx="570.0" cy="175.8" r="0.55" fill="#fff" opacity="0.39"/></g></svg>
+<div class="sunrise" aria-hidden="true"><img src="https://sdo.gsfc.nasa.gov/assets/img/latest/latest_1024_0171.jpg" alt="" onerror="this.parentNode.remove()"></div>
+<div class="wrap hero-in">
   <!-- EDIT:identity -->
   <h1>Kent State University AI Lab</h1>
+  <p class="hero-pi">Principal Investigator: <a href="https://yuzhiguo07.github.io/" title="Dr. Yuzhi Guo — homepage">Dr. Yuzhi Guo</a></p>
   <p class="role">
     We design and apply machine learning, computer vision, and deep learning
     techniques to solve practical problems, spanning drug discovery, medical
     image processing, and bioinformatics.
   </p>
-  <!-- EDIT:contact -->
-  <nav class="links">
-    <a href="https://yuzhiguo07.github.io/">PI Homepage</a>
-    <a href="https://scholar.google.com/citations?user=UNgRbboAAAAJ&amp;hl=en">Google Scholar</a>
-  </nav>
+</div>
 </header>
 
-<section>
+<main class="wrap">
+
+<section class="page topics" data-route="research">
   <h2>Research Areas</h2>
   <p class="sec-note">Selected publications per topic. See the <a href="https://yuzhiguo07.github.io/" style="color:var(--accent)">PI homepage</a> for the full list.</p>
 
+  <nav class="area-nav" aria-label="Research areas">
+    <a href="#area-1">Large Language Models &amp; Guideline-Driven Reasoning</a>
+    <a href="#area-2">Multimodal Representation Learning</a>
+    <a href="#area-3">Medical Imaging &amp; Computational Pathology</a>
+    <a href="#area-4">Gene Function &amp; Genomics</a>
+    <a href="#area-5">Protein Modeling</a>
+    <a href="#area-6">Molecular Representation and Property Prediction</a>
+  </nav>
+
   <!-- EDIT:topic — copy a whole article block to add a research area -->
-  <article class="topic">
-    <h3>Large Language Models &amp; Guideline-Driven Reasoning</h3>
-    <p>
+  <article class="topic" id="area-1">
+    <div class="topic-bar"><h3>Large Language Models &amp; Guideline-Driven Reasoning</h3></div>
+    <p class="topic-desc">
       Teaching models to follow explicit written rules: turning guidelines into environments a model can act in, optimizing prompts for expert annotation, and grounding multimodal reasoning in domain protocols.
     </p>
     <ul class="pubs">
-      <li><span class="venue">ACL'26</span><span class="t">Guidelines as Environments: A World Model Approach to Rule Following</span></li>
-      <li><span class="venue">AAAI'26</span><span class="t">Learning from Guidelines: Structured Prompt Optimization for Expert Annotation Tasks</span></li>
-      <li><span class="venue">CVPR'26</span><span class="t">Universal Guideline-Driven Image Clustering via a Hybrid LLM Agent</span></li>
-      <li><span class="venue">MIDL'26</span><span class="t">Guideline-Informed MLLM Reasoning for Pathology-Aware Post-Operative Prostate CTV Segmentation</span></li>
+      <li class="nofig">
+        <div class="pub-body"><span class="venue">ACL'26</span><span class="t">Guidelines as Environments: A World Model Approach to Rule Following</span>
+          <div class="pub-links"><a href="https://aclanthology.org/2026.acl-long.741/">Paper <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></div>
+        </div>
+      </li>
+      <li class="nofig">
+        <div class="pub-body"><span class="venue">AAAI'26</span><span class="t">Learning from Guidelines: Structured Prompt Optimization for Expert Annotation Tasks</span>
+          <div class="pub-links"><a href="https://doi.org/10.1609/aaai.v40i41.40812">DOI <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></div>
+        </div>
+      </li>
+      <li>
+        <a class="fig" href="https://arxiv.org/html/2606.24094v1/method_overview.png" aria-label="View figure"><img src="https://arxiv.org/html/2606.24094v1/method_overview.png" alt="" loading="lazy" onerror="var l=this.closest('li');this.parentNode.remove();l.classList.add('nofig')"></a>
+        <div class="pub-body"><span class="venue">CVPR'26</span><span class="t">Universal Guideline-Driven Image Clustering via a Hybrid LLM Agent</span>
+          <div class="pub-links"><a href="https://arxiv.org/abs/2606.24094">arXiv <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></div>
+        </div>
+      </li>
+      <li class="nofig">
+        <div class="pub-body"><span class="venue">MIDL'26</span><span class="t">Guideline-Informed MLLM Reasoning for Pathology-Aware Post-Operative Prostate CTV Segmentation</span>
+          <div class="pub-links"><a href="https://proceedings.mlr.press/v315/wu26b.html">Paper <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></div>
+        </div>
+      </li>
     </ul>
   </article>
 
-  <article class="topic">
-    <h3>Multimodal Representation Learning</h3>
-    <p>
+  <article class="topic" id="area-2">
+    <div class="topic-bar"><h3>Multimodal Representation Learning</h3></div>
+    <p class="topic-desc">
       Aligning and fusing heterogeneous sources — images, text, molecules, clinical records — into shared representations, with attention to the geometry of the embedding space and to what happens when modalities are missing.
     </p>
     <ul class="pubs">
-      <li><span class="venue">ICLR'26</span><span class="t">GRAM-DTI: Adaptive Multimodal Representation Learning for Drug-Target Interaction Prediction</span></li>
-      <li><span class="venue">CVPR'26</span><span class="t">Hyperbolic Gramian Volumes for Multimodal Alignment</span></li>
-      <li><span class="venue">NeurIPS'25</span><span class="t">TRIDENT: Tri-Modal Molecular Representation Learning with Taxonomic Annotations and Local Correspondence</span></li>
-      <li><span class="venue">ECCV'26</span><span class="t">Histopathology Multi-modal Embedding for Pathology Composed Retrieval</span></li>
-      <li><span class="venue">ICCV'25</span><span class="t">Zero-Shot Composed Image Retrieval via Dual-Stream Instruction-Aware Distillation</span></li>
-      <li><span class="venue">MIDL'26</span><span class="t">Heterogeneous Aligned Fusion for Survival Prediction with Missing Modalities</span></li>
+      <li>
+        <a class="fig" href="https://arxiv.org/html/2509.21971v2/framework.png" aria-label="View figure"><img src="https://arxiv.org/html/2509.21971v2/framework.png" alt="" loading="lazy" onerror="var l=this.closest('li');this.parentNode.remove();l.classList.add('nofig')"></a>
+        <div class="pub-body"><span class="venue">ICLR'26</span><span class="t">GRAM-DTI: Adaptive Multimodal Representation Learning for Drug-Target Interaction Prediction</span>
+          <div class="pub-links"><a href="https://arxiv.org/abs/2509.21971">arXiv <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a><a href="https://github.com/uta-smile/GRAM-DTI">Code <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></div>
+        </div>
+      </li>
+      <li class="nofig">
+        <div class="pub-body"><span class="venue">CVPR'26</span><span class="t">Hyperbolic Gramian Volumes for Multimodal Alignment</span>
+          <div class="pub-links"><a href="https://openaccess.thecvf.com/content/CVPR2026/html/Na_Hyperbolic_Gramian_Volumes_for_Multimodal_Alignment_CVPR_2026_paper.html">Paper <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a><a href="https://github.com/uta-smile/HyperGram">Code <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></div>
+        </div>
+      </li>
+      <li>
+        <a class="fig" href="https://arxiv.org/html/2506.21028v2/1.png" aria-label="View figure"><img src="https://arxiv.org/html/2506.21028v2/1.png" alt="" loading="lazy" onerror="var l=this.closest('li');this.parentNode.remove();l.classList.add('nofig')"></a>
+        <div class="pub-body"><span class="venue">NeurIPS'25</span><span class="t">TRIDENT: Tri-Modal Molecular Representation Learning with Taxonomic Annotations and Local Correspondence</span>
+          <div class="pub-links"><a href="https://arxiv.org/abs/2506.21028">arXiv <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a><a href="https://github.com/uta-smile/TRIDENT">Code <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></div>
+        </div>
+      </li>
+      <li>
+        <a class="fig" href="https://arxiv.org/html/2502.07221v4/m_1.png" aria-label="View figure"><img src="https://arxiv.org/html/2502.07221v4/m_1.png" alt="" loading="lazy" onerror="var l=this.closest('li');this.parentNode.remove();l.classList.add('nofig')"></a>
+        <div class="pub-body"><span class="venue">ECCV'26</span><span class="t">Histopathology Multi-modal Embedding for Pathology Composed Retrieval</span>
+          <div class="pub-links"><a href="https://doi.org/10.1007/978-3-032-37167-6_24">DOI <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></div>
+        </div>
+      </li>
+      <li class="nofig">
+        <div class="pub-body"><span class="venue">ICCV'25</span><span class="t">Zero-Shot Composed Image Retrieval via Dual-Stream Instruction-Aware Distillation</span>
+          <div class="pub-links"><a href="https://doi.org/10.1109/ICCV51701.2025.02063">DOI <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></div>
+        </div>
+      </li>
+      <li>
+        <a class="fig" href="https://arxiv.org/html/2601.10386v2/figure2.png" aria-label="View figure"><img src="https://arxiv.org/html/2601.10386v2/figure2.png" alt="" loading="lazy" onerror="var l=this.closest('li');this.parentNode.remove();l.classList.add('nofig')"></a>
+        <div class="pub-body"><span class="venue">MIDL'26</span><span class="t">Heterogeneous Aligned Fusion for Survival Prediction with Missing Modalities</span>
+          <div class="pub-links"><a href="https://proceedings.mlr.press/v315/zheng26a.html">Paper <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></div>
+        </div>
+      </li>
     </ul>
   </article>
 
-  <article class="topic">
-    <h3>Medical Imaging &amp; Computational Pathology</h3>
-    <p>
+  <article class="topic" id="area-3">
+    <div class="topic-bar"><h3>Medical Imaging &amp; Computational Pathology</h3></div>
+    <p class="topic-desc">
       Whole-slide image analysis, nuclei segmentation, survival prediction and screening from medical images, with a focus on learning under weak labels and on predictions clinicians can interpret.
     </p>
     <ul class="pubs">
-      <li><span class="venue">IEEE TNNLS'25</span><span class="t">Segment Any Cell: A SAM-based Auto-prompting Fine-tuning Framework for Nuclei Segmentation</span></li>
-      <li><span class="venue">NPJ Dig. Med.'25</span><span class="t">Multi-modal Analysis of Whole Slide Images in Colorectal Cancer</span></li>
-      <li><span class="venue">MICCAI'24</span><span class="t">PathM3: A Multimodal Multi-Task Multiple Instance Learning Framework for Whole Slide Image Classification and Captioning</span></li>
-      <li><span class="venue">MICCAI'25</span><span class="t">HAGE: Hierarchical Alignment Gene-Enhanced Pathology Representation Learning with Spatial Transcriptomics</span></li>
-      <li><span class="venue">MICCAI'25</span><span class="t">Text-Guided Multi-Instance Learning for Scoliosis Screening via Gait Video Analysis</span></li>
-      <li><span class="venue">MIDL'26</span><span class="t">Guideline-Informed MLLM Reasoning for Pathology-Aware Post-Operative Prostate CTV Segmentation</span></li>
-      <li><span class="venue">ISBI'25</span><span class="t">Contrastive Pretraining for Computational Pathology With Visual Language Models</span></li>
-      <li><span class="venue">Front. Med.'25</span><span class="t">Abnormality-aware Multimodal Learning for WSI Classification</span></li>
-      <li><span class="venue">ACM BCB'24</span><span class="t">MFMF: Multiple Foundation Model Fusion Networks for Whole Slide Image Classification</span></li>
-      <li><span class="venue">ICCV'21</span><span class="t">Exploring Robustness of Unsupervised Domain Adaptation in Semantic Segmentation</span></li>
+      <li>
+        <a class="fig" href="https://arxiv.org/html/2401.13220v1/CVPR.png" aria-label="View figure"><img src="https://arxiv.org/html/2401.13220v1/CVPR.png" alt="" loading="lazy" onerror="var l=this.closest('li');this.parentNode.remove();l.classList.add('nofig')"></a>
+        <div class="pub-body"><span class="venue">IEEE TNNLS'25</span><span class="t">Segment Any Cell: A SAM-based Auto-prompting Fine-tuning Framework for Nuclei Segmentation</span>
+          <div class="pub-links"><a href="https://doi.org/10.1109/TNNLS.2025.3611322">DOI <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></div>
+        </div>
+      </li>
+      <li>
+        <a class="fig" href="https://media.springernature.com/lw685/springer-static/image/art%3A10.1038%2Fs41746-025-02095-y/MediaObjects/41746_2025_2095_Fig1_HTML.png" aria-label="View figure"><img src="https://media.springernature.com/lw685/springer-static/image/art%3A10.1038%2Fs41746-025-02095-y/MediaObjects/41746_2025_2095_Fig1_HTML.png" alt="" loading="lazy" onerror="var l=this.closest('li');this.parentNode.remove();l.classList.add('nofig')"></a>
+        <div class="pub-body"><span class="venue">NPJ Dig. Med.'25</span><span class="t">Multi-modal Analysis of Whole Slide Images in Colorectal Cancer</span>
+          <div class="pub-links"><a href="https://doi.org/10.1038/s41746-025-02095-y">DOI <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></div>
+        </div>
+      </li>
+      <li>
+        <a class="fig" href="https://arxiv.org/html/2403.08967v2/fig1.png" aria-label="View figure"><img src="https://arxiv.org/html/2403.08967v2/fig1.png" alt="" loading="lazy" onerror="var l=this.closest('li');this.parentNode.remove();l.classList.add('nofig')"></a>
+        <div class="pub-body"><span class="venue">MICCAI'24</span><span class="t">PathM3: A Multimodal Multi-Task Multiple Instance Learning Framework for Whole Slide Image Classification and Captioning</span>
+          <div class="pub-links"><a href="https://doi.org/10.1007/978-3-031-72083-3_35">DOI <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></div>
+        </div>
+      </li>
+      <li class="nofig">
+        <div class="pub-body"><span class="venue">MICCAI'25</span><span class="t">HAGE: Hierarchical Alignment Gene-Enhanced Pathology Representation Learning with Spatial Transcriptomics</span>
+          <div class="pub-links"><a href="https://doi.org/10.1007/978-3-032-04927-8_22">DOI <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a><a href="https://github.com/uta-smile/gene_expression">Code <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></div>
+        </div>
+      </li>
+      <li>
+        <a class="fig" href="https://arxiv.org/html/2507.02996v1/fig2.png" aria-label="View figure"><img src="https://arxiv.org/html/2507.02996v1/fig2.png" alt="" loading="lazy" onerror="var l=this.closest('li');this.parentNode.remove();l.classList.add('nofig')"></a>
+        <div class="pub-body"><span class="venue">MICCAI'25</span><span class="t">Text-Guided Multi-Instance Learning for Scoliosis Screening via Gait Video Analysis</span>
+          <div class="pub-links"><a href="https://doi.org/10.1007/978-3-032-04978-0_62">DOI <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a><a href="https://github.com/lhqqq/TG-MILNet">Code <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></div>
+        </div>
+      </li>
+      <li class="nofig">
+        <div class="pub-body"><span class="venue">MIDL'26</span><span class="t">Guideline-Informed MLLM Reasoning for Pathology-Aware Post-Operative Prostate CTV Segmentation</span>
+          <div class="pub-links"><a href="https://proceedings.mlr.press/v315/wu26b.html">Paper <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></div>
+        </div>
+      </li>
+      <li class="nofig">
+        <div class="pub-body"><span class="venue">ISBI'25</span><span class="t">Contrastive Pretraining for Computational Pathology With Visual Language Models</span>
+          <div class="pub-links"><a href="https://doi.org/10.1109/ISBI60581.2025.10981180">DOI <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></div>
+        </div>
+      </li>
+      <li>
+        <a class="fig" href="https://www.frontiersin.org/files/Articles/1546452/fmed-12-1546452-HTML/image_m/fmed-12-1546452-g001.jpg" aria-label="View figure"><img src="https://www.frontiersin.org/files/Articles/1546452/fmed-12-1546452-HTML/image_m/fmed-12-1546452-g001.jpg" alt="" loading="lazy" onerror="var l=this.closest('li');this.parentNode.remove();l.classList.add('nofig')"></a>
+        <div class="pub-body"><span class="venue">Front. Med.'25</span><span class="t">Abnormality-aware Multimodal Learning for WSI Classification</span>
+          <div class="pub-links"><a href="https://doi.org/10.3389/fmed.2025.1546452">DOI <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></div>
+        </div>
+      </li>
+      <li class="nofig">
+        <div class="pub-body"><span class="venue">ACM BCB'24</span><span class="t">MFMF: Multiple Foundation Model Fusion Networks for Whole Slide Image Classification</span>
+          <div class="pub-links"><a href="https://doi.org/10.1145/3698587.3701372">DOI <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></div>
+        </div>
+      </li>
+      <li>
+        <a class="fig" href="https://arxiv.org/html/2105.10843v2/attack-eps-converted-to.png" aria-label="View figure"><img src="https://arxiv.org/html/2105.10843v2/attack-eps-converted-to.png" alt="" loading="lazy" onerror="var l=this.closest('li');this.parentNode.remove();l.classList.add('nofig')"></a>
+        <div class="pub-body"><span class="venue">ICCV'21</span><span class="t">Exploring Robustness of Unsupervised Domain Adaptation in Semantic Segmentation</span>
+          <div class="pub-links"><a href="https://doi.org/10.1109/ICCV48922.2021.00906">DOI <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a><a href="https://github.com/uta-smile/ASSUDA">Code <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></div>
+        </div>
+      </li>
     </ul>
   </article>
 
-  <article class="topic">
-    <h3>Gene Function &amp; Genomics</h3>
-    <p>
+  <article class="topic" id="area-4">
+    <div class="topic-bar"><h3>Gene Function &amp; Genomics</h3></div>
+    <p class="topic-desc">
       Language models and graph methods for genomic sequence and gene annotation: motif-oriented DNA pretraining, Gene Ontology-informed representations, and predicting the phenotypic consequences of gene knockouts.
     </p>
     <ul class="pubs">
-      <li><span class="venue">AAAI'26</span><span class="t">GenePheno: Interpretable Gene Knockout-Induced Phenotype Abnormality Prediction from Gene Sequences</span></li>
-      <li><span class="venue">AAAI'25</span><span class="t">GoBERT: Gene Ontology Graph Informed BERT for Universal Gene Function Prediction</span></li>
-      <li><span class="venue">BioMedInform.'24</span><span class="t">Advancing DNA Language Models through Motif-Oriented Pre-training with MoDNA</span></li>
-      <li><span class="venue">ACM BCB'22</span><span class="t">MoDNA: Motif-Oriented Pre-training for DNA Language Model</span></li>
-      <li><span class="venue">MICCAI'25</span><span class="t">HAGE: Hierarchical Alignment Gene-Enhanced Pathology Representation Learning with Spatial Transcriptomics</span></li>
+      <li>
+        <a class="fig" href="https://arxiv.org/html/2511.09512v2/GenePheno_Figure_2.png" aria-label="View figure"><img src="https://arxiv.org/html/2511.09512v2/GenePheno_Figure_2.png" alt="" loading="lazy" onerror="var l=this.closest('li');this.parentNode.remove();l.classList.add('nofig')"></a>
+        <div class="pub-body"><span class="venue">AAAI'26</span><span class="t">GenePheno: Interpretable Gene Knockout-Induced Phenotype Abnormality Prediction from Gene Sequences</span>
+          <div class="pub-links"><a href="https://arxiv.org/abs/2511.09512">arXiv <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></div>
+        </div>
+      </li>
+      <li>
+        <a class="fig" href="https://arxiv.org/html/2501.01930v1/miao_main.png" aria-label="View figure"><img src="https://arxiv.org/html/2501.01930v1/miao_main.png" alt="" loading="lazy" onerror="var l=this.closest('li');this.parentNode.remove();l.classList.add('nofig')"></a>
+        <div class="pub-body"><span class="venue">AAAI'25</span><span class="t">GoBERT: Gene Ontology Graph Informed BERT for Universal Gene Function Prediction</span>
+          <div class="pub-links"><a href="https://arxiv.org/abs/2501.01930">arXiv <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></div>
+        </div>
+      </li>
+      <li>
+        <a class="fig" href="https://www.mdpi.com/biomedinformatics/biomedinformatics-04-00085/article_deploy/html/images/biomedinformatics-04-00085-g001.png" aria-label="View figure"><img src="https://www.mdpi.com/biomedinformatics/biomedinformatics-04-00085/article_deploy/html/images/biomedinformatics-04-00085-g001.png" alt="" loading="lazy" onerror="var l=this.closest('li');this.parentNode.remove();l.classList.add('nofig')"></a>
+        <div class="pub-body"><span class="venue">BioMedInform.'24</span><span class="t">Advancing DNA Language Models through Motif-Oriented Pre-training with MoDNA</span>
+          <div class="pub-links"><a href="https://doi.org/10.3390/biomedinformatics4020085">DOI <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a><a href="https://github.com/uta-smile/MoDNA">Code <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></div>
+        </div>
+      </li>
+      <li>
+        <a class="fig" href="https://www.mdpi.com/biomedinformatics/biomedinformatics-04-00085/article_deploy/html/images/biomedinformatics-04-00085-g001.png" aria-label="View figure"><img src="https://www.mdpi.com/biomedinformatics/biomedinformatics-04-00085/article_deploy/html/images/biomedinformatics-04-00085-g001.png" alt="" loading="lazy" onerror="var l=this.closest('li');this.parentNode.remove();l.classList.add('nofig')"></a>
+        <div class="pub-body"><span class="venue">ACM BCB'22</span><span class="t">MoDNA: Motif-Oriented Pre-training for DNA Language Model</span>
+          <div class="pub-links"><a href="https://doi.org/10.1145/3535508.3545512">DOI <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a><a href="https://github.com/uta-smile/MoDNA">Code <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></div>
+        </div>
+      </li>
+      <li class="nofig">
+        <div class="pub-body"><span class="venue">MICCAI'25</span><span class="t">HAGE: Hierarchical Alignment Gene-Enhanced Pathology Representation Learning with Spatial Transcriptomics</span>
+          <div class="pub-links"><a href="https://doi.org/10.1007/978-3-032-04927-8_22">DOI <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a><a href="https://github.com/uta-smile/gene_expression">Code <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></div>
+        </div>
+      </li>
     </ul>
   </article>
 
-  <article class="topic">
-    <h3>Protein Modeling</h3>
-    <p>
+  <article class="topic" id="area-5">
+    <div class="topic-bar"><h3>Protein Modeling</h3></div>
+    <p class="topic-desc">
       Representation learning for protein sequence and structure — secondary structure and structural property prediction, self-supervised pretraining from tertiary structures, and enhancing evolutionary profiles — together with the immune receptor side: BCR and TCR repertoires, antigen binding affinity and B-cell epitope prediction.
     </p>
     <ul class="pubs">
-      <li><span class="venue">Nat. Cancer'25</span><span class="t">Profiling Antigen Binding Affinity of B Cell Repertoires in Tumors by Deep Learning</span></li>
-      <li><span class="venue">Brief. Bioinform.'24</span><span class="t">GTE: A Graph Learning Framework for Prediction of T-Cell Receptors and Epitopes Binding Specificity</span></li>
-      <li><span class="venue">ACM BCB'24</span><span class="t">AlphaEpi: Enhancing B Cell Epitope Prediction with AlphaFold 3</span></li>
-      <li><span class="venue">AAAI'22</span><span class="t">Self-supervised Pretraining for Protein Embeddings Using Tertiary Structures</span></li>
-      <li><span class="venue">IEEE BIBM'20</span><span class="t">Protein Ensemble Learning with Atrous Spatial Pyramid Networks for Secondary Structure Prediction</span></li>
-      <li><span class="venue">RECOMB'20</span><span class="t">Bagging MSA Learning: Enhancing Low-Quality PSSM with Deep Learning for Accurate Protein Structure Property Prediction</span></li>
-      <li><span class="venue">IEEE BIBM'20</span><span class="t">WeightAln: Weighted Homologous Alignment for Protein Structure Property Prediction</span></li>
-      <li><span class="venue">J. Comput. Biol.'21</span><span class="t">EPTool: A New Enhancing PSSM Tool for Protein Secondary Structure Prediction</span></li>
+      <li>
+        <a class="fig" href="https://media.springernature.com/lw685/springer-static/image/art%3A10.1038%2Fs43018-025-01001-5/MediaObjects/43018_2025_1001_Fig1_HTML.png" aria-label="View figure"><img src="https://media.springernature.com/lw685/springer-static/image/art%3A10.1038%2Fs43018-025-01001-5/MediaObjects/43018_2025_1001_Fig1_HTML.png" alt="" loading="lazy" onerror="var l=this.closest('li');this.parentNode.remove();l.classList.add('nofig')"></a>
+        <div class="pub-body"><span class="venue">Nat. Cancer'25</span><span class="t">Profiling Antigen Binding Affinity of B Cell Repertoires in Tumors by Deep Learning</span>
+          <div class="pub-links"><a href="https://doi.org/10.1038/s43018-025-01001-5">DOI <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></div>
+        </div>
+      </li>
+      <li class="nofig">
+        <div class="pub-body"><span class="venue">Brief. Bioinform.'24</span><span class="t">GTE: A Graph Learning Framework for Prediction of T-Cell Receptors and Epitopes Binding Specificity</span>
+          <div class="pub-links"><a href="https://doi.org/10.1093/bib/bbae343">DOI <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a><a href="https://github.com/uta-smile/GTE">Code <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></div>
+        </div>
+      </li>
+      <li class="nofig">
+        <div class="pub-body"><span class="venue">ACM BCB'24</span><span class="t">AlphaEpi: Enhancing B Cell Epitope Prediction with AlphaFold 3</span>
+          <div class="pub-links"><a href="https://doi.org/10.1145/3698587.3701389">DOI <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a><a href="https://github.com/uta-smile/AlphaEpi">Code <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></div>
+        </div>
+      </li>
+      <li class="nofig">
+        <div class="pub-body"><span class="venue">AAAI'22</span><span class="t">Self-supervised Pretraining for Protein Embeddings Using Tertiary Structures</span>
+          <div class="pub-links"><a href="https://doi.org/10.1609/aaai.v36i6.20636">DOI <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a><a href="https://github.com/yuzhiguo07/Protein-Structure-Embedding">Code <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></div>
+        </div>
+      </li>
+      <li class="nofig">
+        <div class="pub-body"><span class="venue">IEEE BIBM'20</span><span class="t">Protein Ensemble Learning with Atrous Spatial Pyramid Networks for Secondary Structure Prediction</span>
+          <div class="pub-links"><a href="https://doi.org/10.1109/BIBM49941.2020.9313276">DOI <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a><a href="https://github.com/yuzhiguo07/Protein-EnsembleASP">Code <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></div>
+        </div>
+      </li>
+      <li class="nofig">
+        <div class="pub-body"><span class="venue">RECOMB'20</span><span class="t">Bagging MSA Learning: Enhancing Low-Quality PSSM with Deep Learning for Accurate Protein Structure Property Prediction</span>
+          <div class="pub-links"><a href="https://doi.org/10.1007/978-3-030-45257-5_6">DOI <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a><a href="https://github.com/yuzhiguo07/bagging-msa-learning">Code <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></div>
+        </div>
+      </li>
+      <li class="nofig">
+        <div class="pub-body"><span class="venue">IEEE BIBM'20</span><span class="t">WeightAln: Weighted Homologous Alignment for Protein Structure Property Prediction</span>
+          <div class="pub-links"><a href="https://doi.org/10.1109/BIBM49941.2020.9313340">DOI <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></div>
+        </div>
+      </li>
+      <li class="nofig">
+        <div class="pub-body"><span class="venue">J. Comput. Biol.'21</span><span class="t">EPTool: A New Enhancing PSSM Tool for Protein Secondary Structure Prediction</span>
+          <div class="pub-links"><a href="https://doi.org/10.1089/cmb.2020.0417">DOI <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a><a href="https://github.com/yuzhiguo07/EPTool">Code <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></div>
+        </div>
+      </li>
     </ul>
   </article>
 
-  <article class="topic">
-    <h3>Molecular Representation and Property Prediction</h3>
-    <p>
+  <article class="topic" id="area-6">
+    <div class="topic-bar"><h3>Molecular Representation and Property Prediction</h3></div>
+    <p class="topic-desc">
       Pretraining and robust training for molecular property prediction, including learning from limited labels and handling the distribution shift that comes with new chemical space.
     </p>
     <ul class="pubs">
-      <li><span class="venue">ACM BCB'19</span><span class="t">SMILES-BERT: Large Scale Unsupervised Pre-training for Molecular Property Prediction</span></li>
-      <li><span class="venue">ICLR'26</span><span class="t">GRAM-DTI: Adaptive Multimodal Representation Learning for Drug-Target Interaction Prediction</span></li>
-      <li><span class="venue">NeurIPS'25</span><span class="t">TRIDENT: Tri-Modal Molecular Representation Learning with Taxonomic Annotations and Local Correspondence</span></li>
-      <li><span class="venue">J. Comput. Biol.'24</span><span class="t">Towards Robust Self-training for Molecular Biology Prediction Tasks</span></li>
-      <li><span class="venue">IEEE BIBM'21</span><span class="t">Gradient-Norm Based Attentive Loss for Molecular Property Prediction</span></li>
-      <li><span class="venue">IEEE BIBM'20</span><span class="t">Improving Molecular Property Prediction on Limited Data with Deep Multi-Label Learning</span></li>
-      <li><span class="venue">ICML Workshop'23</span><span class="t">CoSSL: A Context-based Semi-Supervised Framework for Molecular Property Prediction</span></li>
+      <li class="nofig">
+        <div class="pub-body"><span class="venue">ACM BCB'19</span><span class="t">SMILES-BERT: Large Scale Unsupervised Pre-training for Molecular Property Prediction</span>
+          <div class="pub-links"><a href="https://doi.org/10.1145/3307339.3342186">DOI <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a><a href="https://github.com/uta-smile/SMILES-BERT">Code <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></div>
+        </div>
+      </li>
+      <li>
+        <a class="fig" href="https://arxiv.org/html/2509.21971v2/framework.png" aria-label="View figure"><img src="https://arxiv.org/html/2509.21971v2/framework.png" alt="" loading="lazy" onerror="var l=this.closest('li');this.parentNode.remove();l.classList.add('nofig')"></a>
+        <div class="pub-body"><span class="venue">ICLR'26</span><span class="t">GRAM-DTI: Adaptive Multimodal Representation Learning for Drug-Target Interaction Prediction</span>
+          <div class="pub-links"><a href="https://arxiv.org/abs/2509.21971">arXiv <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a><a href="https://github.com/uta-smile/GRAM-DTI">Code <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></div>
+        </div>
+      </li>
+      <li>
+        <a class="fig" href="https://arxiv.org/html/2506.21028v2/1.png" aria-label="View figure"><img src="https://arxiv.org/html/2506.21028v2/1.png" alt="" loading="lazy" onerror="var l=this.closest('li');this.parentNode.remove();l.classList.add('nofig')"></a>
+        <div class="pub-body"><span class="venue">NeurIPS'25</span><span class="t">TRIDENT: Tri-Modal Molecular Representation Learning with Taxonomic Annotations and Local Correspondence</span>
+          <div class="pub-links"><a href="https://arxiv.org/abs/2506.21028">arXiv <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a><a href="https://github.com/uta-smile/TRIDENT">Code <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></div>
+        </div>
+      </li>
+      <li class="nofig">
+        <div class="pub-body"><span class="venue">J. Comput. Biol.'24</span><span class="t">Towards Robust Self-training for Molecular Biology Prediction Tasks</span>
+          <div class="pub-links"><a href="https://doi.org/10.1089/cmb.2023.0187">DOI <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a><a href="https://github.com/uta-smile/robust_self_training">Code <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></div>
+        </div>
+      </li>
+      <li class="nofig">
+        <div class="pub-body"><span class="venue">IEEE BIBM'21</span><span class="t">Gradient-Norm Based Attentive Loss for Molecular Property Prediction</span>
+          <div class="pub-links"><a href="https://doi.org/10.1109/BIBM52615.2021.9669671">DOI <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></div>
+        </div>
+      </li>
+      <li class="nofig">
+        <div class="pub-body"><span class="venue">IEEE BIBM'20</span><span class="t">Improving Molecular Property Prediction on Limited Data with Deep Multi-Label Learning</span>
+          <div class="pub-links"><a href="https://doi.org/10.1109/BIBM49941.2020.9313553">DOI <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></div>
+        </div>
+      </li>
+      <li class="nofig">
+        <div class="pub-body"><span class="venue">ICML Workshop'23</span><span class="t">CoSSL: A Context-based Semi-Supervised Framework for Molecular Property Prediction</span>
+        </div>
+      </li>
     </ul>
   </article>
 </section>
 
-<section>
+<section class="page" data-route="projects">
   <h2>Work in Progress</h2>
   <p class="sec-note">Ongoing projects, with internal notes linked where available.</p>
   <div class="grid">
@@ -361,9 +788,42 @@ footer a{color:var(--accent)}
     open it in a browser to read it.
   </div>
 </section>
-     
-<section>
-  <h2>Join Us</h2>
+
+<section class="page" data-route="people">
+  <h2>People</h2>
+  <!-- EDIT:people -->
+  <h3 class="group-title">Principal Investigator</h3>
+  <article class="profile pi">
+    <img class="photo" src="https://yuzhiguo07.github.io/assets/img/my-passport-photo-new.png" alt="Yuzhi Guo" loading="lazy">
+    <div>
+      <h3>Yuzhi Guo</h3>
+      <p class="p-title">Assistant Professor of Computer Science</p>
+      <p class="p-aff">Kent State University</p>
+      <a class="p-mail" href="mailto:yguo30@kent.edu"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>yguo30@kent.edu</a>
+      <div class="btns">
+        <a class="btn btn-primary" href="https://yuzhiguo07.github.io/">Homepage <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a>
+        <a class="btn btn-ghost" href="https://scholar.google.com/citations?user=UNgRbboAAAAJ&amp;hl=en">Google Scholar <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a>
+      </div>
+    </div>
+  </article>
+
+  <h3 class="group-title">Ph.D. Students</h3>
+  <!-- copy this whole article block to add a student; photo = https://github.com/<username>.png -->
+  <article class="profile student">
+    <img class="photo" src="https://github.com/hongyuyang9.png?size=460" alt="Hongyu Yang" loading="lazy">
+    <div>
+      <h3>Hongyu Yang</h3>
+      <p class="p-title">Ph.D. Student in Computer Science <span class="p-dot">·</span> <span class="p-since">Since Fall 2026</span></p>
+      <a class="p-mail" href="mailto:hyang20@kent.edu"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>hyang20@kent.edu</a>
+      <div class="btns">
+        <a class="btn btn-primary" href="https://hongyuyang9.github.io/">Homepage <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a>
+      </div>
+    </div>
+  </article>
+</section>
+
+<section class="page" data-route="opportunities">
+  <h2>Opportunities</h2>
   <!-- EDIT:join -->
   <div class="join">
     <h3>Welcome to join our team!</h3>
@@ -377,12 +837,99 @@ footer a{color:var(--accent)}
     </div>
   </div>
 </section>
-     
-<footer>
-  Last updated October 2026 · <a href="https://github.com/Kent-AI-Lab">github.com/Kent-AI-Lab</a>
+
+<section class="page" data-route="contact">
+  <h2>Contact</h2>
+  <!-- EDIT:contact-page -->
+  <div class="contact-wrap">
+    <dl class="contact-list">
+      <div class="c-row">
+        <dt>Email</dt>
+        <dd><a href="mailto:yguo30@kent.edu">yguo30@kent.edu</a><span class="c-sub">Dr. Yuzhi Guo, Principal Investigator</span></dd>
+      </div>
+      <div class="c-row">
+        <dt>Address</dt>
+        <dd>Department of Computer Science<br>Mathematical Sciences Building (MSB)<br>1300 University Esplanade<br>Kent State University, Kent, OH 44242</dd>
+      </div>
+      <div class="c-row">
+        <dt>Online</dt>
+        <dd><a href="https://github.com/Kent-AI-Lab">github.com/Kent-AI-Lab</a><br><a href="https://yuzhiguo07.github.io/">PI Homepage</a></dd>
+      </div>
+      <div class="c-row">
+        <dt>Students</dt>
+        <dd>Prospective students: see <a href="#opportunities">Opportunities</a>.</dd>
+      </div>
+    </dl>
+    <figure class="map">
+      <iframe title="Map: Mathematical Sciences Building, Kent State University" src="https://maps.google.com/maps?q=41.1449889,-81.3416480&amp;z=17&amp;hl=en&amp;output=embed" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
+      <figcaption>Mathematical Sciences Building (MSB), Kent State University <a href="https://www.google.com/maps/search/?api=1&amp;query=41.1449889%2C-81.3416480">Open in Google Maps <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></figcaption>
+    </figure>
+  </div>
+</section>
+
+
+</main>
+
+<footer class="site-foot">
+<div class="wrap foot-in">
+  <span class="foot-left"><span>Last updated November 2026</span><span aria-hidden="true">·</span><a href="https://github.com/Kent-AI-Lab"><svg class="ico" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.53-1.33-1.28-1.69-1.28-1.69-1.05-.71.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.68 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.41-2.69 5.38-5.25 5.67.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5Z"/></svg>github.com/Kent-AI-Lab</a></span>
+  <a href="mailto:yguo30@kent.edu"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>yguo30@kent.edu</a>
+</div>
 </footer>
 
-</div>
+<div class="lb" aria-hidden="true"><img alt=""></div>
 
+<script>
+(function(){
+  var lb=document.querySelector(".lb"), lbi=lb.querySelector("img");
+  function shape(img){var f=function(){if(img.naturalWidth) img.parentNode.classList.add(img.naturalWidth/img.naturalHeight>2.1?"wide":"fit")};
+    img.complete?f():img.addEventListener("load",f)}
+  document.querySelectorAll(".fig img").forEach(shape);
+  document.addEventListener("click",function(e){
+    var a=e.target.closest&&e.target.closest("a.fig");
+    if(a){e.preventDefault();lbi.src=a.href;lb.classList.add("open");return}
+    if(e.target.closest&&e.target.closest(".lb")) lb.classList.remove("open");
+  });
+  document.addEventListener("keydown",function(e){if(e.key==="Escape") lb.classList.remove("open")});
+})();
+(function(){
+  var pages=["research","people","projects","opportunities","contact"], alias={join:"opportunities"}, b=document.body;
+  b.classList.add("js");
+  function show(scroll){
+    var raw=location.hash.slice(1), h=alias[raw]||raw, area=/^area-\d+$/.test(raw); if(area||pages.indexOf(h)<0) h="research";
+    b.setAttribute("data-page",h);
+    document.querySelectorAll(".navlinks a").forEach(function(a){
+      var on=a.getAttribute("href")==="#"+h;
+      a.classList.toggle("active",on);
+      if(on) a.setAttribute("aria-current","page"); else a.removeAttribute("aria-current");
+    });
+    if(area){var el=document.getElementById(raw); if(el) el.scrollIntoView();} else if(scroll) window.scrollTo(0,0);
+  }
+  window.addEventListener("hashchange",function(){show(true)});
+  window.addEventListener("popstate",function(){show(true)});
+  // publication count shown in each research-area header
+  document.querySelectorAll(".topic").forEach(function(t){
+    var n=t.querySelectorAll(".pubs > li").length, h=t.querySelector(".topic-bar");
+    if(!h||!n) return; var c=document.createElement("span"); c.className="topic-count";
+    c.textContent=n+(n===1?" selected publication":" selected publications"); h.appendChild(c);
+  });
+  // keep --nav-h equal to the real nav height; mark area bars that are pinned
+  var nav=document.querySelector(".topnav"), bars=[].slice.call(document.querySelectorAll(".topic-bar")), navH=0, tick=false;
+  function measure(){navH=nav.offsetHeight; document.documentElement.style.setProperty("--nav-h",navH+"px"); update()}
+  function update(){tick=false; bars.forEach(function(b){
+    var top=b.getBoundingClientRect().top, art=b.parentNode.getBoundingClientRect().top;
+    b.classList.toggle("stuck", b.offsetParent!==null && top<=navH+1 && art<navH-1)})}
+  window.addEventListener("scroll",function(){if(!tick){tick=true;requestAnimationFrame(update)}},{passive:true});
+  window.addEventListener("resize",measure); window.addEventListener("hashchange",function(){setTimeout(update,0)});
+  measure();
+  // brand → home page with a clean URL (no #research)
+  document.querySelector(".brand").addEventListener("click",function(e){
+    e.preventDefault();
+    if(location.hash) history.pushState("",document.title,location.pathname+location.search);
+    show(true);
+  });
+  show(false);
+})();
+</script>
 </body>
 </html>
