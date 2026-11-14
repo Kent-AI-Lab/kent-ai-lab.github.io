@@ -135,10 +135,32 @@ h1{font-family:var(--font-serif);font-size:clamp(32px,4.6vw,54px);line-height:1.
 .links a::after{content:"↗";font-size:13px;opacity:.7}
 .links a:hover{background:#fff;color:#002664;border-color:#fff}
 
+/* ---- Big Dipper: fixed-size SVG anchored under the intro text, so no star is ever cropped ---- */
+.dipper{position:absolute;z-index:0;left:max(150px,calc((100% - 1120px) / 2 + 150px));bottom:16px;width:230px;height:auto;overflow:visible;pointer-events:none}
+.dipper .st{animation:twinkle 4s ease-in-out infinite}
+@media (prefers-reduced-motion:reduce){.dipper .st{animation:none}}
+@media (max-width:680px){.dipper{display:none}}
+
+/* ---- M45 (Pleiades): real photo — NASA, ESA, AURA/Caltech, Palomar Observatory (public domain, via Wikimedia Commons) ---- */
+.m45-photo{position:absolute;z-index:0;top:34px;right:max(40px,calc((100% - 1120px) / 2 + 60px));width:80px;pointer-events:none;
+  mix-blend-mode:screen;opacity:0;transition:opacity 1.6s ease}
+.m45-photo.on{opacity:.5}
+.m45-photo img{display:block;width:100%;height:auto;
+  -webkit-mask:radial-gradient(ellipse closest-side,#000 62%,transparent 100%);mask:radial-gradient(ellipse closest-side,#000 62%,transparent 100%)}
+@media (max-width:980px){.m45-photo{width:64px}}
+@media (max-width:680px){.m45-photo{display:none}}
+
 /* ---- sunrise: real NASA SDO image (AIA 171 Å, public domain), rising from the bottom edge of the masthead ---- */
-.sunrise{position:absolute;z-index:0;width:760px;height:760px;left:74%;top:100%;transform:translate(-50%,-31%);
+header.hero{--sun-d:760px;--sun-k:.31;--sun-x:74%}
+.sunrise{position:absolute;z-index:0;width:var(--sun-d);height:var(--sun-d);left:var(--sun-x);top:100%;
+  transform:translate(-50%,calc(var(--sun-k) * -100%));
   pointer-events:none;mix-blend-mode:screen;opacity:0;transition:opacity 1.6s ease}
 .sunrise.on{opacity:1}
+/* opaque disc under the sun (outside the blend group) so background stars never show through the solar disk */
+.sun-occlude{position:absolute;z-index:0;left:var(--sun-x);top:calc(100% + var(--sun-d) * (.5 - var(--sun-k)));
+  width:calc(var(--sun-d) * .78);height:calc(var(--sun-d) * .78);border-radius:50%;transform:translate(-50%,-50%);
+  background:#00215a;pointer-events:none;opacity:0;transition:opacity .2s}
+.sun-occlude.on{opacity:1}
 .sunrise::before{content:"";position:absolute;inset:-22%;border-radius:50%;
   background:radial-gradient(circle closest-side,rgba(255,196,110,.30),rgba(255,168,70,.12) 55%,rgba(255,150,60,0) 78%)}
 .sunrise img{position:relative;display:block;width:100%;height:100%;
@@ -147,8 +169,8 @@ h1{font-family:var(--font-serif);font-size:clamp(32px,4.6vw,54px);line-height:1.
   filter:saturate(1.35) contrast(1.15) brightness(1.1);animation:sun-turn 360s linear infinite}
 @keyframes sun-turn{to{transform:rotate(360deg)}}
 @media (prefers-reduced-motion:reduce){.sunrise img{animation:none}}
-@media (max-width:860px){.sunrise{width:520px;height:520px;left:70%}}
-@media (max-width:680px){.sunrise{width:420px;height:420px;left:62%;transform:translate(-50%,-27%)}}
+@media (max-width:860px){header.hero{--sun-d:520px;--sun-x:70%}}
+@media (max-width:680px){header.hero{--sun-d:420px;--sun-x:62%;--sun-k:.27}}
 
 /* ---- page body ---- */
 main{flex:1 0 auto}
@@ -371,12 +393,15 @@ body.js:not([data-page="research"]) main > section.page{padding-top:44px}
 </nav>
 
 <header class="hero page" data-route="research">
-<svg class="sky" viewBox="0 0 1440 520" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false"><defs><radialGradient id="sg"><stop offset="0" stop-color="#fff"/><stop offset=".25" stop-color="#dce8ff" stop-opacity=".9"/><stop offset="1" stop-color="#9dbcff" stop-opacity="0"/></radialGradient><filter id="neb" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="18"/></filter></defs><g><circle class="st" style="--o:0.41;animation-duration:4.0s;animation-delay:-2.8s" cx="118" cy="176" r="0.9" fill="#fff" opacity="0.41"/><circle class="st" style="--o:0.64;animation-duration:4.7s;animation-delay:-0.9s" cx="104" cy="6" r="1.4" fill="#fff" opacity="0.64"/><circle class="st" style="--o:0.74;animation-duration:4.7s;animation-delay:-5.1s" cx="51" cy="325" r="1.1" fill="#fff" opacity="0.74"/><circle class="st" style="--o:0.36;animation-duration:4.0s;animation-delay:-2.3s" cx="194" cy="413" r="0.8" fill="#fff" opacity="0.36"/><circle class="st" style="--o:0.44;animation-duration:5.5s;animation-delay:-1.9s" cx="1061" cy="110" r="1.0" fill="#fff" opacity="0.44"/><circle class="st" style="--o:0.36;animation-duration:4.0s;animation-delay:-1.1s" cx="1221" cy="373" r="1.0" fill="#fff" opacity="0.36"/><circle class="st" style="--o:0.5;animation-duration:4.3s;animation-delay:-0.5s" cx="1009" cy="480" r="0.9" fill="#fff" opacity="0.5"/><circle class="st" style="--o:0.42;animation-duration:4.2s;animation-delay:-3.0s" cx="248" cy="131" r="0.7" fill="#fff" opacity="0.42"/><circle class="st" style="--o:0.51;animation-duration:3.9s;animation-delay:-0.1s" cx="1116" cy="501" r="1.2" fill="#fff" opacity="0.51"/><circle class="st" style="--o:0.68;animation-duration:4.6s;animation-delay:-1.8s" cx="135" cy="47" r="1.4" fill="#fff" opacity="0.68"/><circle class="st" style="--o:0.58;animation-duration:3.8s;animation-delay:-1.4s" cx="1082" cy="165" r="1.0" fill="#fff" opacity="0.58"/><circle class="st" style="--o:0.71;animation-duration:5.1s;animation-delay:-0.9s" cx="557" cy="456" r="0.8" fill="#fff" opacity="0.71"/><circle class="st" style="--o:0.45;animation-duration:3.2s;animation-delay:-1.0s" cx="1074" cy="344" r="1.1" fill="#fff" opacity="0.45"/><circle class="st" style="--o:0.65;animation-duration:4.6s;animation-delay:-5.6s" cx="854" cy="31" r="0.8" fill="#fff" opacity="0.65"/><circle class="st" style="--o:0.72;animation-duration:4.5s;animation-delay:-5.9s" cx="1310" cy="474" r="1.0" fill="#fff" opacity="0.72"/><circle class="st" style="--o:0.52;animation-duration:5.3s;animation-delay:-3.9s" cx="24" cy="260" r="0.7" fill="#fff" opacity="0.52"/><circle class="st" style="--o:0.72;animation-duration:3.7s;animation-delay:-1.8s" cx="898" cy="153" r="0.7" fill="#fff" opacity="0.72"/><circle class="st" style="--o:0.35;animation-duration:3.9s;animation-delay:-1.8s" cx="207" cy="237" r="1.0" fill="#fff" opacity="0.35"/><circle class="st" style="--o:0.55;animation-duration:5.1s;animation-delay:-1.2s" cx="42" cy="446" r="1.4" fill="#fff" opacity="0.55"/><circle class="st" style="--o:0.58;animation-duration:3.4s;animation-delay:-5.3s" cx="263" cy="324" r="1.1" fill="#fff" opacity="0.58"/><circle class="st" style="--o:0.37;animation-duration:4.2s;animation-delay:-0.0s" cx="72" cy="491" r="1.2" fill="#fff" opacity="0.37"/><circle class="st" style="--o:0.54;animation-duration:3.5s;animation-delay:-1.2s" cx="474" cy="505" r="1.4" fill="#fff" opacity="0.54"/><circle class="st" style="--o:0.48;animation-duration:5.6s;animation-delay:-2.2s" cx="955" cy="257" r="1.4" fill="#fff" opacity="0.48"/><circle class="st" style="--o:0.64;animation-duration:5.2s;animation-delay:-2.7s" cx="214" cy="12" r="0.8" fill="#fff" opacity="0.64"/><circle class="st" style="--o:0.64;animation-duration:3.4s;animation-delay:-4.6s" cx="1397" cy="439" r="0.7" fill="#fff" opacity="0.64"/><circle class="st" style="--o:0.42;animation-duration:4.3s;animation-delay:-1.1s" cx="137" cy="318" r="1.2" fill="#fff" opacity="0.42"/><circle class="st" style="--o:0.73;animation-duration:4.2s;animation-delay:-3.4s" cx="1131" cy="465" r="1.4" fill="#fff" opacity="0.73"/><circle class="st" style="--o:0.44;animation-duration:5.8s;animation-delay:-2.9s" cx="1087" cy="232" r="1.4" fill="#fff" opacity="0.44"/><circle class="st" style="--o:0.44;animation-duration:5.7s;animation-delay:-0.3s" cx="1223" cy="202" r="0.7" fill="#fff" opacity="0.44"/><circle class="st" style="--o:0.7;animation-duration:4.3s;animation-delay:-2.0s" cx="1276" cy="112" r="1.1" fill="#fff" opacity="0.7"/><circle class="st" style="--o:0.61;animation-duration:5.8s;animation-delay:-5.1s" cx="1374" cy="204" r="1.1" fill="#fff" opacity="0.61"/><circle class="st" style="--o:0.57;animation-duration:3.4s;animation-delay:-3.3s" cx="1319" cy="339" r="1.0" fill="#fff" opacity="0.57"/><circle class="st" style="--o:0.51;animation-duration:3.5s;animation-delay:-5.1s" cx="895" cy="193" r="1.2" fill="#fff" opacity="0.51"/><circle class="st" style="--o:0.41;animation-duration:3.2s;animation-delay:-2.8s" cx="940" cy="423" r="0.9" fill="#fff" opacity="0.41"/><circle class="st" style="--o:0.53;animation-duration:4.9s;animation-delay:-0.6s" cx="1433" cy="241" r="0.9" fill="#fff" opacity="0.53"/><circle class="st" style="--o:0.55;animation-duration:4.8s;animation-delay:-5.4s" cx="1002" cy="42" r="1.1" fill="#fff" opacity="0.55"/><circle class="st" style="--o:0.68;animation-duration:3.3s;animation-delay:-5.3s" cx="961" cy="326" r="1.2" fill="#fff" opacity="0.68"/><circle class="st" style="--o:0.41;animation-duration:5.4s;animation-delay:-4.1s" cx="830" cy="480" r="1.2" fill="#fff" opacity="0.41"/><circle class="st" style="--o:0.49;animation-duration:5.7s;animation-delay:-0.7s" cx="1214" cy="25" r="0.8" fill="#fff" opacity="0.49"/><circle class="st" style="--o:0.43;animation-duration:4.9s;animation-delay:-1.0s" cx="1252" cy="421" r="1.4" fill="#fff" opacity="0.43"/><circle class="st" style="--o:0.74;animation-duration:5.3s;animation-delay:-1.7s" cx="1292" cy="65" r="1.4" fill="#fff" opacity="0.74"/><circle class="st" style="--o:0.43;animation-duration:4.4s;animation-delay:-0.7s" cx="1298" cy="264" r="1.1" fill="#fff" opacity="0.43"/><circle class="st" style="--o:0.36;animation-duration:4.4s;animation-delay:-3.1s" cx="749" cy="451" r="0.8" fill="#fff" opacity="0.36"/><circle class="st" style="--o:0.56;animation-duration:3.7s;animation-delay:-0.7s" cx="1342" cy="73" r="0.7" fill="#fff" opacity="0.56"/><circle class="st" style="--o:0.4;animation-duration:3.1s;animation-delay:-0.4s" cx="172" cy="516" r="1.4" fill="#fff" opacity="0.4"/><circle class="st" style="--o:0.56;animation-duration:4.9s;animation-delay:-1.0s" cx="233" cy="56" r="1.0" fill="#fff" opacity="0.56"/><circle class="st" style="--o:0.68;animation-duration:5.3s;animation-delay:-1.5s" cx="1354" cy="155" r="1.4" fill="#fff" opacity="0.68"/><circle class="st" style="--o:0.48;animation-duration:3.7s;animation-delay:-1.6s" cx="28" cy="20" r="0.7" fill="#fff" opacity="0.48"/><circle class="st" style="--o:0.43;animation-duration:5.3s;animation-delay:-2.1s" cx="592" cy="484" r="0.7" fill="#fff" opacity="0.43"/><circle class="st" style="--o:0.7;animation-duration:5.2s;animation-delay:-2.7s" cx="271" cy="429" r="0.7" fill="#fff" opacity="0.7"/><circle class="st" style="--o:0.36;animation-duration:3.7s;animation-delay:-3.9s" cx="246" cy="242" r="1.1" fill="#fff" opacity="0.36"/><circle class="st" style="--o:0.42;animation-duration:4.3s;animation-delay:-3.2s" cx="652" cy="506" r="0.7" fill="#fff" opacity="0.42"/><circle class="st" style="--o:0.73;animation-duration:3.5s;animation-delay:-4.8s" cx="1270" cy="504" r="0.8" fill="#fff" opacity="0.73"/><circle class="st" style="--o:0.63;animation-duration:4.1s;animation-delay:-5.5s" cx="1404" cy="15" r="0.8" fill="#fff" opacity="0.63"/><circle class="st" style="--o:0.47;animation-duration:5.8s;animation-delay:-4.4s" cx="123" cy="91" r="1.0" fill="#fff" opacity="0.47"/><circle class="st" style="--o:0.51;animation-duration:3.8s;animation-delay:-0.1s" cx="543" cy="517" r="0.7" fill="#fff" opacity="0.51"/><circle class="st" style="--o:0.61;animation-duration:5.2s;animation-delay:-4.4s" cx="318" cy="510" r="1.0" fill="#fff" opacity="0.61"/><circle class="st" style="--o:0.67;animation-duration:5.8s;animation-delay:-2.2s" cx="1360" cy="343" r="1.2" fill="#fff" opacity="0.67"/><circle class="st" style="--o:0.7;animation-duration:4.4s;animation-delay:-4.7s" cx="1362" cy="10" r="1.2" fill="#fff" opacity="0.7"/><circle class="st" style="--o:0.39;animation-duration:4.1s;animation-delay:-2.0s" cx="394" cy="408" r="1.0" fill="#fff" opacity="0.39"/><circle class="st" style="--o:0.73;animation-duration:5.6s;animation-delay:-1.3s" cx="820" cy="57" r="1.1" fill="#fff" opacity="0.73"/><circle class="st" style="--o:0.64;animation-duration:3.7s;animation-delay:-3.3s" cx="1039" cy="235" r="1.4" fill="#fff" opacity="0.64"/><circle class="st" style="--o:0.57;animation-duration:4.7s;animation-delay:-4.6s" cx="755" cy="416" r="1.0" fill="#fff" opacity="0.57"/><circle class="st" style="--o:0.42;animation-duration:5.0s;animation-delay:-0.1s" cx="1403" cy="166" r="0.8" fill="#fff" opacity="0.42"/><circle class="st" style="--o:0.58;animation-duration:4.8s;animation-delay:-4.7s" cx="1097" cy="77" r="1.0" fill="#fff" opacity="0.58"/><circle class="st" style="--o:0.65;animation-duration:3.5s;animation-delay:-5.8s" cx="43" cy="181" r="1.1" fill="#fff" opacity="0.65"/><circle class="st" style="--o:0.73;animation-duration:4.7s;animation-delay:-3.7s" cx="825" cy="448" r="0.7" fill="#fff" opacity="0.73"/><circle class="st" style="--o:0.7;animation-duration:3.7s;animation-delay:-2.4s" cx="963" cy="14" r="1.2" fill="#fff" opacity="0.7"/><circle class="st" style="--o:0.47;animation-duration:5.2s;animation-delay:-4.8s" cx="1438" cy="470" r="0.8" fill="#fff" opacity="0.47"/><circle class="st" style="--o:0.41;animation-duration:3.7s;animation-delay:-1.9s" cx="1435" cy="54" r="0.9" fill="#fff" opacity="0.41"/><circle class="st" style="--o:0.61;animation-duration:5.1s;animation-delay:-5.2s" cx="832" cy="193" r="1.4" fill="#fff" opacity="0.61"/><circle class="st" style="--o:0.64;animation-duration:3.9s;animation-delay:-1.9s" cx="1384" cy="510" r="1.2" fill="#fff" opacity="0.64"/><circle class="st" style="--o:0.62;animation-duration:5.7s;animation-delay:-0.2s" cx="787" cy="363" r="1.2" fill="#fff" opacity="0.62"/><circle class="st" style="--o:0.59;animation-duration:3.5s;animation-delay:-1.6s" cx="1137" cy="14" r="1.4" fill="#fff" opacity="0.59"/><circle class="st" style="--o:0.57;animation-duration:5.2s;animation-delay:-0.3s" cx="298" cy="96" r="0.7" fill="#fff" opacity="0.57"/><circle class="st" style="--o:0.66;animation-duration:5.5s;animation-delay:-5.9s" cx="18" cy="160" r="1.0" fill="#fff" opacity="0.66"/><circle class="st" style="--o:0.38;animation-duration:4.4s;animation-delay:-2.5s" cx="815" cy="520" r="0.7" fill="#fff" opacity="0.38"/><circle class="st" style="--o:0.51;animation-duration:3.4s;animation-delay:-6.0s" cx="896" cy="517" r="1.0" fill="#fff" opacity="0.51"/><circle class="st" style="--o:0.54;animation-duration:3.4s;animation-delay:-4.1s" cx="14" cy="514" r="0.7" fill="#fff" opacity="0.54"/><circle class="st" style="--o:0.49;animation-duration:3.4s;animation-delay:-3.1s" cx="10" cy="462" r="0.8" fill="#fff" opacity="0.49"/><circle class="st" style="--o:0.53;animation-duration:5.4s;animation-delay:-5.4s" cx="209" cy="472" r="0.7" fill="#fff" opacity="0.53"/><circle class="st" style="--o:0.48;animation-duration:5.4s;animation-delay:-4.7s" cx="396" cy="438" r="1.4" fill="#fff" opacity="0.48"/><circle class="st" style="--o:0.57;animation-duration:3.7s;animation-delay:-5.2s" cx="969" cy="61" r="1.0" fill="#fff" opacity="0.57"/><circle class="st" style="--o:0.71;animation-duration:3.4s;animation-delay:-1.6s" cx="534" cy="486" r="0.8" fill="#fff" opacity="0.71"/><circle class="st" style="--o:0.53;animation-duration:4.8s;animation-delay:-1.4s" cx="320" cy="0" r="0.7" fill="#fff" opacity="0.53"/><circle class="st" style="--o:0.39;animation-duration:4.6s;animation-delay:-2.1s" cx="1244" cy="292" r="1.1" fill="#fff" opacity="0.39"/><circle class="st" style="--o:0.36;animation-duration:4.6s;animation-delay:-0.2s" cx="830" cy="98" r="1.1" fill="#fff" opacity="0.36"/><circle class="st" style="--o:0.64;animation-duration:5.3s;animation-delay:-3.7s" cx="1043" cy="455" r="0.7" fill="#fff" opacity="0.64"/><circle class="st" style="--o:0.37;animation-duration:3.5s;animation-delay:-0.7s" cx="38" cy="53" r="1.1" fill="#fff" opacity="0.37"/><circle class="st" style="--o:0.65;animation-duration:3.1s;animation-delay:-0.7s" cx="122" cy="380" r="0.9" fill="#fff" opacity="0.65"/></g><g class="m45"><circle class="st" style="--o:0.37;animation-duration:4.4s;animation-delay:-4.3s" cx="555.6" cy="193.8" r="0.84" fill="#fff" opacity="0.37"/><circle class="st" style="--o:0.36;animation-duration:4.6s;animation-delay:-4.0s" cx="540.3" cy="195.9" r="0.77" fill="#fff" opacity="0.36"/><circle class="st" style="--o:0.43;animation-duration:5.9s;animation-delay:-1.0s" cx="540.1" cy="192.5" r="0.62" fill="#fff" opacity="0.43"/><circle class="st" style="--o:0.41;animation-duration:5.7s;animation-delay:-3.0s" cx="579.4" cy="193.5" r="0.76" fill="#fff" opacity="0.41"/><circle class="st" style="--o:0.33;animation-duration:3.7s;animation-delay:-0.9s" cx="570.7" cy="183.3" r="0.74" fill="#fff" opacity="0.33"/><circle class="st" style="--o:0.37;animation-duration:4.1s;animation-delay:-3.9s" cx="566.2" cy="200.1" r="0.71" fill="#fff" opacity="0.37"/><circle class="st" style="--o:0.45;animation-duration:3.0s;animation-delay:-0.4s" cx="576.3" cy="179.3" r="0.70" fill="#fff" opacity="0.45"/><circle class="st" style="--o:0.38;animation-duration:3.8s;animation-delay:-3.8s" cx="580.0" cy="186.4" r="0.58" fill="#fff" opacity="0.38"/><circle class="st" style="--o:0.39;animation-duration:5.0s;animation-delay:-2.6s" cx="570.0" cy="175.8" r="0.55" fill="#fff" opacity="0.39"/></g></svg>
-<div class="sunrise" aria-hidden="true"><img src="https://sdo.gsfc.nasa.gov/assets/img/latest/latest_1024_0171.jpg" alt="" decoding="async" onload="this.parentNode.classList.add('on')" onerror="this.parentNode.remove()"></div>
+<svg class="sky" viewBox="0 0 1440 520" preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false"><defs><radialGradient id="sg"><stop offset="0" stop-color="#fff"/><stop offset=".25" stop-color="#dce8ff" stop-opacity=".9"/><stop offset="1" stop-color="#9dbcff" stop-opacity="0"/></radialGradient><filter id="neb" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="18"/></filter><filter id="neb2" x="-60%" y="-60%" width="220%" height="220%"><feGaussianBlur stdDeviation="9"/></filter></defs><g><circle class="st" style="--o:0.64;animation-duration:4.8s;animation-delay:-5.1s" cx="392" cy="254" r="1.1" fill="#fff" opacity="0.64"/><circle class="st" style="--o:0.59;animation-duration:4.4s;animation-delay:-5.9s" cx="118" cy="176" r="0.8" fill="#fff" opacity="0.59"/><circle class="st" style="--o:0.54;animation-duration:4.8s;animation-delay:-4.7s" cx="104" cy="6" r="1.3" fill="#fff" opacity="0.54"/><circle class="st" style="--o:0.56;animation-duration:3.0s;animation-delay:-4.1s" cx="409" cy="61" r="1.1" fill="#fff" opacity="0.56"/><circle class="st" style="--o:0.44;animation-duration:3.6s;animation-delay:-1.0s" cx="448" cy="387" r="0.7" fill="#fff" opacity="0.44"/><circle class="st" style="--o:0.63;animation-duration:5.6s;animation-delay:-4.6s" cx="51" cy="325" r="0.7" fill="#fff" opacity="0.63"/><circle class="st" style="--o:0.41;animation-duration:4.8s;animation-delay:-1.3s" cx="194" cy="413" r="1.1" fill="#fff" opacity="0.41"/><circle class="st" style="--o:0.65;animation-duration:5.5s;animation-delay:-2.1s" cx="1061" cy="110" r="1.1" fill="#fff" opacity="0.65"/><circle class="st" style="--o:0.61;animation-duration:3.7s;animation-delay:-5.4s" cx="1221" cy="373" r="0.8" fill="#fff" opacity="0.61"/><circle class="st" style="--o:0.46;animation-duration:3.3s;animation-delay:-2.3s" cx="1009" cy="480" r="0.9" fill="#fff" opacity="0.46"/><circle class="st" style="--o:0.38;animation-duration:5.5s;animation-delay:-0.1s" cx="248" cy="131" r="1.3" fill="#fff" opacity="0.38"/><circle class="st" style="--o:0.36;animation-duration:5.8s;animation-delay:-4.4s" cx="1116" cy="501" r="0.8" fill="#fff" opacity="0.36"/><circle class="st" style="--o:0.65;animation-duration:3.2s;animation-delay:-3.0s" cx="135" cy="47" r="0.8" fill="#fff" opacity="0.65"/><circle class="st" style="--o:0.53;animation-duration:3.8s;animation-delay:-3.9s" cx="1082" cy="165" r="0.7" fill="#fff" opacity="0.53"/><circle class="st" style="--o:0.46;animation-duration:3.9s;animation-delay:-5.3s" cx="557" cy="456" r="1.0" fill="#fff" opacity="0.46"/><circle class="st" style="--o:0.62;animation-duration:5.7s;animation-delay:-2.1s" cx="1074" cy="344" r="1.2" fill="#fff" opacity="0.62"/><circle class="st" style="--o:0.42;animation-duration:4.6s;animation-delay:-0.7s" cx="854" cy="31" r="1.2" fill="#fff" opacity="0.42"/><circle class="st" style="--o:0.42;animation-duration:5.6s;animation-delay:-4.4s" cx="1310" cy="474" r="0.9" fill="#fff" opacity="0.42"/><circle class="st" style="--o:0.37;animation-duration:3.9s;animation-delay:-0.3s" cx="506" cy="326" r="0.7" fill="#fff" opacity="0.37"/><circle class="st" style="--o:0.6;animation-duration:5.9s;animation-delay:-2.4s" cx="24" cy="260" r="0.9" fill="#fff" opacity="0.6"/><circle class="st" style="--o:0.66;animation-duration:4.7s;animation-delay:-3.1s" cx="898" cy="153" r="1.2" fill="#fff" opacity="0.66"/><circle class="st" style="--o:0.35;animation-duration:4.5s;animation-delay:-1.4s" cx="597" cy="434" r="1.3" fill="#fff" opacity="0.35"/><circle class="st" style="--o:0.41;animation-duration:4.0s;animation-delay:-1.0s" cx="207" cy="237" r="1.3" fill="#fff" opacity="0.41"/><circle class="st" style="--o:0.66;animation-duration:4.0s;animation-delay:-0.7s" cx="42" cy="446" r="0.9" fill="#fff" opacity="0.66"/><circle class="st" style="--o:0.45;animation-duration:3.2s;animation-delay:-6.0s" cx="415" cy="156" r="1.3" fill="#fff" opacity="0.45"/><circle class="st" style="--o:0.64;animation-duration:5.9s;animation-delay:-1.2s" cx="263" cy="324" r="1.0" fill="#fff" opacity="0.64"/><circle class="st" style="--o:0.53;animation-duration:4.0s;animation-delay:-4.2s" cx="72" cy="491" r="1.1" fill="#fff" opacity="0.53"/><circle class="st" style="--o:0.37;animation-duration:3.4s;animation-delay:-2.6s" cx="829" cy="188" r="1.2" fill="#fff" opacity="0.37"/><circle class="st" style="--o:0.62;animation-duration:4.5s;animation-delay:-0.5s" cx="955" cy="257" r="1.3" fill="#fff" opacity="0.62"/><circle class="st" style="--o:0.63;animation-duration:5.2s;animation-delay:-5.4s" cx="214" cy="12" r="1.2" fill="#fff" opacity="0.63"/><circle class="st" style="--o:0.4;animation-duration:4.6s;animation-delay:-0.2s" cx="1397" cy="439" r="0.7" fill="#fff" opacity="0.4"/><circle class="st" style="--o:0.52;animation-duration:4.9s;animation-delay:-5.4s" cx="137" cy="318" r="1.3" fill="#fff" opacity="0.52"/><circle class="st" style="--o:0.46;animation-duration:3.9s;animation-delay:-0.8s" cx="1131" cy="465" r="1.3" fill="#fff" opacity="0.46"/><circle class="st" style="--o:0.63;animation-duration:3.5s;animation-delay:-3.1s" cx="565" cy="313" r="1.1" fill="#fff" opacity="0.63"/><circle class="st" style="--o:0.67;animation-duration:5.8s;animation-delay:-0.8s" cx="1087" cy="232" r="1.0" fill="#fff" opacity="0.67"/><circle class="st" style="--o:0.5;animation-duration:4.6s;animation-delay:-3.6s" cx="1223" cy="202" r="0.8" fill="#fff" opacity="0.5"/><circle class="st" style="--o:0.38;animation-duration:5.7s;animation-delay:-1.6s" cx="579" cy="196" r="0.7" fill="#fff" opacity="0.38"/><circle class="st" style="--o:0.37;animation-duration:3.3s;animation-delay:-3.9s" cx="1276" cy="112" r="0.9" fill="#fff" opacity="0.37"/><circle class="st" style="--o:0.39;animation-duration:4.5s;animation-delay:-5.8s" cx="1374" cy="204" r="0.9" fill="#fff" opacity="0.39"/><circle class="st" style="--o:0.42;animation-duration:4.5s;animation-delay:-3.2s" cx="1319" cy="339" r="0.8" fill="#fff" opacity="0.42"/><circle class="st" style="--o:0.48;animation-duration:4.5s;animation-delay:-5.6s" cx="895" cy="193" r="1.0" fill="#fff" opacity="0.48"/><circle class="st" style="--o:0.48;animation-duration:3.3s;animation-delay:-1.3s" cx="940" cy="423" r="0.7" fill="#fff" opacity="0.48"/><circle class="st" style="--o:0.58;animation-duration:4.7s;animation-delay:-0.6s" cx="1433" cy="241" r="1.1" fill="#fff" opacity="0.58"/><circle class="st" style="--o:0.6;animation-duration:3.4s;animation-delay:-2.2s" cx="1002" cy="42" r="0.8" fill="#fff" opacity="0.6"/><circle class="st" style="--o:0.62;animation-duration:4.2s;animation-delay:-5.2s" cx="961" cy="326" r="1.0" fill="#fff" opacity="0.62"/><circle class="st" style="--o:0.51;animation-duration:4.5s;animation-delay:-2.4s" cx="830" cy="480" r="1.2" fill="#fff" opacity="0.51"/><circle class="st" style="--o:0.53;animation-duration:5.0s;animation-delay:-3.6s" cx="550" cy="10" r="1.1" fill="#fff" opacity="0.53"/><circle class="st" style="--o:0.51;animation-duration:3.9s;animation-delay:-2.6s" cx="1214" cy="25" r="1.3" fill="#fff" opacity="0.51"/><circle class="st" style="--o:0.45;animation-duration:4.3s;animation-delay:-4.2s" cx="636" cy="326" r="1.0" fill="#fff" opacity="0.45"/><circle class="st" style="--o:0.4;animation-duration:3.1s;animation-delay:-5.9s" cx="1252" cy="421" r="1.1" fill="#fff" opacity="0.4"/><circle class="st" style="--o:0.65;animation-duration:3.6s;animation-delay:-5.8s" cx="1292" cy="65" r="0.9" fill="#fff" opacity="0.65"/><circle class="st" style="--o:0.37;animation-duration:4.6s;animation-delay:-4.3s" cx="770" cy="123" r="0.7" fill="#fff" opacity="0.37"/><circle class="st" style="--o:0.44;animation-duration:3.3s;animation-delay:-0.2s" cx="671" cy="56" r="1.0" fill="#fff" opacity="0.44"/><circle class="st" style="--o:0.6;animation-duration:3.3s;animation-delay:-2.0s" cx="1298" cy="264" r="0.9" fill="#fff" opacity="0.6"/><circle class="st" style="--o:0.67;animation-duration:3.4s;animation-delay:-4.2s" cx="602" cy="101" r="0.9" fill="#fff" opacity="0.67"/><circle class="st" style="--o:0.41;animation-duration:4.4s;animation-delay:-1.6s" cx="749" cy="451" r="0.9" fill="#fff" opacity="0.41"/><circle class="st" style="--o:0.57;animation-duration:4.5s;animation-delay:-0.4s" cx="1342" cy="73" r="0.9" fill="#fff" opacity="0.57"/><circle class="st" style="--o:0.4;animation-duration:3.2s;animation-delay:-1.5s" cx="172" cy="516" r="0.9" fill="#fff" opacity="0.4"/><circle class="st" style="--o:0.64;animation-duration:4.0s;animation-delay:-1.1s" cx="500" cy="190" r="1.3" fill="#fff" opacity="0.64"/><circle class="st" style="--o:0.56;animation-duration:3.1s;animation-delay:-4.4s" cx="233" cy="56" r="0.7" fill="#fff" opacity="0.56"/><circle class="st" style="--o:0.5;animation-duration:4.2s;animation-delay:-1.4s" cx="1354" cy="155" r="0.9" fill="#fff" opacity="0.5"/><circle class="st" style="--o:0.49;animation-duration:5.0s;animation-delay:-4.1s" cx="28" cy="20" r="0.8" fill="#fff" opacity="0.49"/><circle class="st" style="--o:0.62;animation-duration:3.2s;animation-delay:-3.5s" cx="271" cy="429" r="1.3" fill="#fff" opacity="0.62"/><circle class="st" style="--o:0.44;animation-duration:3.1s;animation-delay:-3.8s" cx="492" cy="444" r="0.7" fill="#fff" opacity="0.44"/><circle class="st" style="--o:0.56;animation-duration:5.1s;animation-delay:-3.6s" cx="640" cy="283" r="0.9" fill="#fff" opacity="0.56"/><circle class="st" style="--o:0.54;animation-duration:5.6s;animation-delay:-1.9s" cx="1270" cy="504" r="1.1" fill="#fff" opacity="0.54"/><circle class="st" style="--o:0.36;animation-duration:4.9s;animation-delay:-5.9s" cx="1404" cy="15" r="0.7" fill="#fff" opacity="0.36"/><circle class="st" style="--o:0.56;animation-duration:5.2s;animation-delay:-0.0s" cx="123" cy="91" r="0.8" fill="#fff" opacity="0.56"/><circle class="st" style="--o:0.45;animation-duration:3.1s;animation-delay:-1.1s" cx="393" cy="7" r="0.7" fill="#fff" opacity="0.45"/><circle class="st" style="--o:0.45;animation-duration:4.4s;animation-delay:-5.0s" cx="783" cy="300" r="1.3" fill="#fff" opacity="0.45"/><circle class="st" style="--o:0.44;animation-duration:4.0s;animation-delay:-1.0s" cx="897" cy="471" r="1.1" fill="#fff" opacity="0.44"/><circle class="st" style="--o:0.56;animation-duration:5.2s;animation-delay:-2.4s" cx="318" cy="510" r="0.7" fill="#fff" opacity="0.56"/><circle class="st" style="--o:0.52;animation-duration:4.7s;animation-delay:-2.9s" cx="1360" cy="343" r="0.7" fill="#fff" opacity="0.52"/><circle class="st" style="--o:0.35;animation-duration:3.2s;animation-delay:-1.2s" cx="1362" cy="10" r="0.8" fill="#fff" opacity="0.35"/><circle class="st" style="--o:0.5;animation-duration:3.2s;animation-delay:-2.3s" cx="643" cy="1" r="0.9" fill="#fff" opacity="0.5"/><circle class="st" style="--o:0.43;animation-duration:5.9s;animation-delay:-1.5s" cx="376" cy="113" r="1.0" fill="#fff" opacity="0.43"/><circle class="st" style="--o:0.56;animation-duration:5.3s;animation-delay:-3.1s" cx="820" cy="57" r="0.8" fill="#fff" opacity="0.56"/><circle class="st" style="--o:0.4;animation-duration:3.2s;animation-delay:-1.8s" cx="1039" cy="235" r="1.2" fill="#fff" opacity="0.4"/><circle class="st" style="--o:0.61;animation-duration:3.2s;animation-delay:-4.3s" cx="511" cy="512" r="1.0" fill="#fff" opacity="0.61"/><circle class="st" style="--o:0.4;animation-duration:5.6s;animation-delay:-3.0s" cx="1403" cy="166" r="1.3" fill="#fff" opacity="0.4"/></g></svg>
+<svg class="dipper" viewBox="0 0 259 153" aria-hidden="true" focusable="false"><circle class="st" style="--o:0.86;animation-duration:3.9s;animation-delay:-4.0s" cx="244.0" cy="12.0" r="2.09" fill="#fff" opacity="0.86"/><circle class="st" style="--o:0.79;animation-duration:3.2s;animation-delay:-1.7s" cx="246.6" cy="65.7" r="1.9" fill="#fff" opacity="0.79"/><circle class="st" style="--o:0.79;animation-duration:4.9s;animation-delay:-3.8s" cx="173.0" cy="92.6" r="1.88" fill="#fff" opacity="0.79"/><circle class="st" style="--o:0.69;animation-duration:5.2s;animation-delay:-3.1s" cx="142.4" cy="59.2" r="1.59" fill="#fff" opacity="0.69"/><circle class="st" style="--o:0.86;animation-duration:4.3s;animation-delay:-2.1s" cx="87.8" cy="69.9" r="2.1" fill="#fff" opacity="0.86"/><circle class="st" style="--o:0.81;animation-duration:6.0s;animation-delay:-0.2s" cx="45.4" cy="80.3" r="1.95" fill="#fff" opacity="0.81"/><circle class="st" style="--o:0.85;animation-duration:4.4s;animation-delay:-2.0s" cx="12.0" cy="136.4" r="2.07" fill="#fff" opacity="0.85"/><circle class="st" style="--o:0.38;animation-duration:3.8s;animation-delay:-3.6s" cx="39.8" cy="78.3" r="0.93" fill="#fff" opacity="0.38"/><circle class="st" style="--o:0.33;animation-duration:5.8s;animation-delay:-3.8s" cx="21.0" cy="141.4" r="0.75" fill="#fff" opacity="0.33"/></svg>
+<div class="m45-photo" aria-hidden="true"><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/4e/Pleiades_large.jpg/960px-Pleiades_large.jpg" alt="" decoding="async" onload="this.parentNode.classList.add('on')" onerror="this.parentNode.remove()"></div>
+<div class="sun-occlude" aria-hidden="true"></div>
+<div class="sunrise" aria-hidden="true"><img src="https://sdo.gsfc.nasa.gov/assets/img/latest/latest_1024_0171.jpg" alt="" decoding="async" onload="this.parentNode.classList.add('on');document.querySelector('.sun-occlude').classList.add('on')" onerror="this.parentNode.remove();document.querySelector('.sun-occlude').remove()"></div>
 <div class="wrap hero-in">
   <!-- EDIT:identity -->
   <h1>Kent State University AI Lab</h1>
-  <p class="hero-pi">Principal Investigator: <a href="https://yuzhiguo07.github.io/" title="Dr. Yuzhi Guo — homepage">Dr. Yuzhi Guo</a></p>
+  <p class="hero-pi">Principal Investigator: <a href="https://yuzhiguo07.github.io/" title="Dr. Yuzhi Guo — homepage" target="_blank" rel="noopener">Dr. Yuzhi Guo</a></p>
   <p class="role">
     We design and apply machine learning, computer vision, and deep learning
     techniques to solve practical problems, spanning drug discovery, medical
@@ -389,7 +414,7 @@ body.js:not([data-page="research"]) main > section.page{padding-top:44px}
 
 <section class="page topics" data-route="research">
   <h2>Research Areas</h2>
-  <p class="sec-note">Selected publications per topic. See the <a href="https://yuzhiguo07.github.io/" style="color:var(--accent)">PI homepage</a> for the full list.</p>
+  <p class="sec-note">Selected publications per topic. See the <a href="https://yuzhiguo07.github.io/" style="color:var(--accent)" target="_blank" rel="noopener">PI homepage</a> for the full list.</p>
 
   <nav class="area-nav" aria-label="Research areas">
     <a href="#area-1">Large Language Models &amp; Guideline-Driven Reasoning</a>
@@ -409,23 +434,23 @@ body.js:not([data-page="research"]) main > section.page{padding-top:44px}
     <ul class="pubs">
       <li class="nofig">
         <div class="pub-body"><span class="venue">ACL'26</span><span class="t">Guidelines as Environments: A World Model Approach to Rule Following</span>
-          <div class="pub-links"><a href="https://aclanthology.org/2026.acl-long.741/">Paper <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></div>
+          <div class="pub-links"><a href="https://aclanthology.org/2026.acl-long.741/" target="_blank" rel="noopener">Paper <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></div>
         </div>
       </li>
       <li class="nofig">
         <div class="pub-body"><span class="venue">AAAI'26</span><span class="t">Learning from Guidelines: Structured Prompt Optimization for Expert Annotation Tasks</span>
-          <div class="pub-links"><a href="https://doi.org/10.1609/aaai.v40i41.40812">DOI <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></div>
+          <div class="pub-links"><a href="https://doi.org/10.1609/aaai.v40i41.40812" target="_blank" rel="noopener">DOI <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></div>
         </div>
       </li>
       <li>
-        <a class="fig" href="https://arxiv.org/html/2606.24094v1/method_overview.png" aria-label="View figure"><img src="https://arxiv.org/html/2606.24094v1/method_overview.png" alt="" loading="lazy" onerror="var l=this.closest('li');this.parentNode.remove();l.classList.add('nofig')"></a>
+        <a class="fig" href="https://arxiv.org/html/2606.24094v1/method_overview.png" aria-label="View figure" target="_blank" rel="noopener"><img src="https://arxiv.org/html/2606.24094v1/method_overview.png" alt="" loading="lazy" onerror="var l=this.closest('li');this.parentNode.remove();l.classList.add('nofig')"></a>
         <div class="pub-body"><span class="venue">CVPR'26</span><span class="t">Universal Guideline-Driven Image Clustering via a Hybrid LLM Agent</span>
-          <div class="pub-links"><a href="https://arxiv.org/abs/2606.24094">arXiv <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></div>
+          <div class="pub-links"><a href="https://arxiv.org/abs/2606.24094" target="_blank" rel="noopener">arXiv <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></div>
         </div>
       </li>
       <li class="nofig">
         <div class="pub-body"><span class="venue">MIDL'26</span><span class="t">Guideline-Informed MLLM Reasoning for Pathology-Aware Post-Operative Prostate CTV Segmentation</span>
-          <div class="pub-links"><a href="https://proceedings.mlr.press/v315/wu26b.html">Paper <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></div>
+          <div class="pub-links"><a href="https://proceedings.mlr.press/v315/wu26b.html" target="_blank" rel="noopener">Paper <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></div>
         </div>
       </li>
     </ul>
@@ -438,37 +463,37 @@ body.js:not([data-page="research"]) main > section.page{padding-top:44px}
     </p>
     <ul class="pubs">
       <li>
-        <a class="fig" href="https://arxiv.org/html/2509.21971v2/framework.png" aria-label="View figure"><img src="https://arxiv.org/html/2509.21971v2/framework.png" alt="" loading="lazy" onerror="var l=this.closest('li');this.parentNode.remove();l.classList.add('nofig')"></a>
+        <a class="fig" href="https://arxiv.org/html/2509.21971v2/framework.png" aria-label="View figure" target="_blank" rel="noopener"><img src="https://arxiv.org/html/2509.21971v2/framework.png" alt="" loading="lazy" onerror="var l=this.closest('li');this.parentNode.remove();l.classList.add('nofig')"></a>
         <div class="pub-body"><span class="venue">ICLR'26</span><span class="t">GRAM-DTI: Adaptive Multimodal Representation Learning for Drug-Target Interaction Prediction</span>
-          <div class="pub-links"><a href="https://arxiv.org/abs/2509.21971">arXiv <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a><a href="https://github.com/uta-smile/GRAM-DTI">Code <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></div>
+          <div class="pub-links"><a href="https://arxiv.org/abs/2509.21971" target="_blank" rel="noopener">arXiv <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a><a href="https://github.com/uta-smile/GRAM-DTI" target="_blank" rel="noopener">Code <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></div>
         </div>
       </li>
       <li class="nofig">
         <div class="pub-body"><span class="venue">CVPR'26</span><span class="t">Hyperbolic Gramian Volumes for Multimodal Alignment</span>
-          <div class="pub-links"><a href="https://openaccess.thecvf.com/content/CVPR2026/html/Na_Hyperbolic_Gramian_Volumes_for_Multimodal_Alignment_CVPR_2026_paper.html">Paper <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a><a href="https://github.com/uta-smile/HyperGram">Code <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></div>
+          <div class="pub-links"><a href="https://openaccess.thecvf.com/content/CVPR2026/html/Na_Hyperbolic_Gramian_Volumes_for_Multimodal_Alignment_CVPR_2026_paper.html" target="_blank" rel="noopener">Paper <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a><a href="https://github.com/uta-smile/HyperGram" target="_blank" rel="noopener">Code <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></div>
         </div>
       </li>
       <li>
-        <a class="fig" href="https://arxiv.org/html/2506.21028v2/1.png" aria-label="View figure"><img src="https://arxiv.org/html/2506.21028v2/1.png" alt="" loading="lazy" onerror="var l=this.closest('li');this.parentNode.remove();l.classList.add('nofig')"></a>
+        <a class="fig" href="https://arxiv.org/html/2506.21028v2/1.png" aria-label="View figure" target="_blank" rel="noopener"><img src="https://arxiv.org/html/2506.21028v2/1.png" alt="" loading="lazy" onerror="var l=this.closest('li');this.parentNode.remove();l.classList.add('nofig')"></a>
         <div class="pub-body"><span class="venue">NeurIPS'25</span><span class="t">TRIDENT: Tri-Modal Molecular Representation Learning with Taxonomic Annotations and Local Correspondence</span>
-          <div class="pub-links"><a href="https://arxiv.org/abs/2506.21028">arXiv <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a><a href="https://github.com/uta-smile/TRIDENT">Code <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></div>
+          <div class="pub-links"><a href="https://arxiv.org/abs/2506.21028" target="_blank" rel="noopener">arXiv <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a><a href="https://github.com/uta-smile/TRIDENT" target="_blank" rel="noopener">Code <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></div>
         </div>
       </li>
       <li>
-        <a class="fig" href="https://arxiv.org/html/2502.07221v4/m_1.png" aria-label="View figure"><img src="https://arxiv.org/html/2502.07221v4/m_1.png" alt="" loading="lazy" onerror="var l=this.closest('li');this.parentNode.remove();l.classList.add('nofig')"></a>
+        <a class="fig" href="https://arxiv.org/html/2502.07221v4/m_1.png" aria-label="View figure" target="_blank" rel="noopener"><img src="https://arxiv.org/html/2502.07221v4/m_1.png" alt="" loading="lazy" onerror="var l=this.closest('li');this.parentNode.remove();l.classList.add('nofig')"></a>
         <div class="pub-body"><span class="venue">ECCV'26</span><span class="t">Histopathology Multi-modal Embedding for Pathology Composed Retrieval</span>
-          <div class="pub-links"><a href="https://doi.org/10.1007/978-3-032-37167-6_24">DOI <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></div>
+          <div class="pub-links"><a href="https://doi.org/10.1007/978-3-032-37167-6_24" target="_blank" rel="noopener">DOI <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></div>
         </div>
       </li>
       <li class="nofig">
         <div class="pub-body"><span class="venue">ICCV'25</span><span class="t">Zero-Shot Composed Image Retrieval via Dual-Stream Instruction-Aware Distillation</span>
-          <div class="pub-links"><a href="https://doi.org/10.1109/ICCV51701.2025.02063">DOI <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></div>
+          <div class="pub-links"><a href="https://doi.org/10.1109/ICCV51701.2025.02063" target="_blank" rel="noopener">DOI <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></div>
         </div>
       </li>
       <li>
-        <a class="fig" href="https://arxiv.org/html/2601.10386v2/figure2.png" aria-label="View figure"><img src="https://arxiv.org/html/2601.10386v2/figure2.png" alt="" loading="lazy" onerror="var l=this.closest('li');this.parentNode.remove();l.classList.add('nofig')"></a>
+        <a class="fig" href="https://arxiv.org/html/2601.10386v2/figure2.png" aria-label="View figure" target="_blank" rel="noopener"><img src="https://arxiv.org/html/2601.10386v2/figure2.png" alt="" loading="lazy" onerror="var l=this.closest('li');this.parentNode.remove();l.classList.add('nofig')"></a>
         <div class="pub-body"><span class="venue">MIDL'26</span><span class="t">Heterogeneous Aligned Fusion for Survival Prediction with Missing Modalities</span>
-          <div class="pub-links"><a href="https://proceedings.mlr.press/v315/zheng26a.html">Paper <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></div>
+          <div class="pub-links"><a href="https://proceedings.mlr.press/v315/zheng26a.html" target="_blank" rel="noopener">Paper <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></div>
         </div>
       </li>
     </ul>
@@ -481,59 +506,59 @@ body.js:not([data-page="research"]) main > section.page{padding-top:44px}
     </p>
     <ul class="pubs">
       <li>
-        <a class="fig" href="https://arxiv.org/html/2401.13220v1/CVPR.png" aria-label="View figure"><img src="https://arxiv.org/html/2401.13220v1/CVPR.png" alt="" loading="lazy" onerror="var l=this.closest('li');this.parentNode.remove();l.classList.add('nofig')"></a>
+        <a class="fig" href="https://arxiv.org/html/2401.13220v1/CVPR.png" aria-label="View figure" target="_blank" rel="noopener"><img src="https://arxiv.org/html/2401.13220v1/CVPR.png" alt="" loading="lazy" onerror="var l=this.closest('li');this.parentNode.remove();l.classList.add('nofig')"></a>
         <div class="pub-body"><span class="venue">IEEE TNNLS'25</span><span class="t">Segment Any Cell: A SAM-based Auto-prompting Fine-tuning Framework for Nuclei Segmentation</span>
-          <div class="pub-links"><a href="https://doi.org/10.1109/TNNLS.2025.3611322">DOI <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></div>
+          <div class="pub-links"><a href="https://doi.org/10.1109/TNNLS.2025.3611322" target="_blank" rel="noopener">DOI <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></div>
         </div>
       </li>
       <li>
-        <a class="fig" href="https://media.springernature.com/lw685/springer-static/image/art%3A10.1038%2Fs41746-025-02095-y/MediaObjects/41746_2025_2095_Fig1_HTML.png" aria-label="View figure"><img src="https://media.springernature.com/lw685/springer-static/image/art%3A10.1038%2Fs41746-025-02095-y/MediaObjects/41746_2025_2095_Fig1_HTML.png" alt="" loading="lazy" onerror="var l=this.closest('li');this.parentNode.remove();l.classList.add('nofig')"></a>
+        <a class="fig" href="https://media.springernature.com/lw685/springer-static/image/art%3A10.1038%2Fs41746-025-02095-y/MediaObjects/41746_2025_2095_Fig1_HTML.png" aria-label="View figure" target="_blank" rel="noopener"><img src="https://media.springernature.com/lw685/springer-static/image/art%3A10.1038%2Fs41746-025-02095-y/MediaObjects/41746_2025_2095_Fig1_HTML.png" alt="" loading="lazy" onerror="var l=this.closest('li');this.parentNode.remove();l.classList.add('nofig')"></a>
         <div class="pub-body"><span class="venue">NPJ Dig. Med.'25</span><span class="t">Multi-modal Analysis of Whole Slide Images in Colorectal Cancer</span>
-          <div class="pub-links"><a href="https://doi.org/10.1038/s41746-025-02095-y">DOI <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></div>
+          <div class="pub-links"><a href="https://doi.org/10.1038/s41746-025-02095-y" target="_blank" rel="noopener">DOI <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></div>
         </div>
       </li>
       <li>
-        <a class="fig" href="https://arxiv.org/html/2403.08967v2/fig1.png" aria-label="View figure"><img src="https://arxiv.org/html/2403.08967v2/fig1.png" alt="" loading="lazy" onerror="var l=this.closest('li');this.parentNode.remove();l.classList.add('nofig')"></a>
+        <a class="fig" href="https://arxiv.org/html/2403.08967v2/fig1.png" aria-label="View figure" target="_blank" rel="noopener"><img src="https://arxiv.org/html/2403.08967v2/fig1.png" alt="" loading="lazy" onerror="var l=this.closest('li');this.parentNode.remove();l.classList.add('nofig')"></a>
         <div class="pub-body"><span class="venue">MICCAI'24</span><span class="t">PathM3: A Multimodal Multi-Task Multiple Instance Learning Framework for Whole Slide Image Classification and Captioning</span>
-          <div class="pub-links"><a href="https://doi.org/10.1007/978-3-031-72083-3_35">DOI <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></div>
+          <div class="pub-links"><a href="https://doi.org/10.1007/978-3-031-72083-3_35" target="_blank" rel="noopener">DOI <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></div>
         </div>
       </li>
       <li class="nofig">
         <div class="pub-body"><span class="venue">MICCAI'25</span><span class="t">HAGE: Hierarchical Alignment Gene-Enhanced Pathology Representation Learning with Spatial Transcriptomics</span>
-          <div class="pub-links"><a href="https://doi.org/10.1007/978-3-032-04927-8_22">DOI <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a><a href="https://github.com/uta-smile/gene_expression">Code <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></div>
+          <div class="pub-links"><a href="https://doi.org/10.1007/978-3-032-04927-8_22" target="_blank" rel="noopener">DOI <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a><a href="https://github.com/uta-smile/gene_expression" target="_blank" rel="noopener">Code <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></div>
         </div>
       </li>
       <li>
-        <a class="fig" href="https://arxiv.org/html/2507.02996v1/fig2.png" aria-label="View figure"><img src="https://arxiv.org/html/2507.02996v1/fig2.png" alt="" loading="lazy" onerror="var l=this.closest('li');this.parentNode.remove();l.classList.add('nofig')"></a>
+        <a class="fig" href="https://arxiv.org/html/2507.02996v1/fig2.png" aria-label="View figure" target="_blank" rel="noopener"><img src="https://arxiv.org/html/2507.02996v1/fig2.png" alt="" loading="lazy" onerror="var l=this.closest('li');this.parentNode.remove();l.classList.add('nofig')"></a>
         <div class="pub-body"><span class="venue">MICCAI'25</span><span class="t">Text-Guided Multi-Instance Learning for Scoliosis Screening via Gait Video Analysis</span>
-          <div class="pub-links"><a href="https://doi.org/10.1007/978-3-032-04978-0_62">DOI <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a><a href="https://github.com/lhqqq/TG-MILNet">Code <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></div>
+          <div class="pub-links"><a href="https://doi.org/10.1007/978-3-032-04978-0_62" target="_blank" rel="noopener">DOI <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a><a href="https://github.com/lhqqq/TG-MILNet" target="_blank" rel="noopener">Code <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></div>
         </div>
       </li>
       <li class="nofig">
         <div class="pub-body"><span class="venue">MIDL'26</span><span class="t">Guideline-Informed MLLM Reasoning for Pathology-Aware Post-Operative Prostate CTV Segmentation</span>
-          <div class="pub-links"><a href="https://proceedings.mlr.press/v315/wu26b.html">Paper <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></div>
+          <div class="pub-links"><a href="https://proceedings.mlr.press/v315/wu26b.html" target="_blank" rel="noopener">Paper <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></div>
         </div>
       </li>
       <li class="nofig">
         <div class="pub-body"><span class="venue">ISBI'25</span><span class="t">Contrastive Pretraining for Computational Pathology With Visual Language Models</span>
-          <div class="pub-links"><a href="https://doi.org/10.1109/ISBI60581.2025.10981180">DOI <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></div>
+          <div class="pub-links"><a href="https://doi.org/10.1109/ISBI60581.2025.10981180" target="_blank" rel="noopener">DOI <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></div>
         </div>
       </li>
       <li>
-        <a class="fig" href="https://www.frontiersin.org/files/Articles/1546452/fmed-12-1546452-HTML/image_m/fmed-12-1546452-g001.jpg" aria-label="View figure"><img src="https://www.frontiersin.org/files/Articles/1546452/fmed-12-1546452-HTML/image_m/fmed-12-1546452-g001.jpg" alt="" loading="lazy" onerror="var l=this.closest('li');this.parentNode.remove();l.classList.add('nofig')"></a>
+        <a class="fig" href="https://www.frontiersin.org/files/Articles/1546452/fmed-12-1546452-HTML/image_m/fmed-12-1546452-g001.jpg" aria-label="View figure" target="_blank" rel="noopener"><img src="https://www.frontiersin.org/files/Articles/1546452/fmed-12-1546452-HTML/image_m/fmed-12-1546452-g001.jpg" alt="" loading="lazy" onerror="var l=this.closest('li');this.parentNode.remove();l.classList.add('nofig')"></a>
         <div class="pub-body"><span class="venue">Front. Med.'25</span><span class="t">Abnormality-aware Multimodal Learning for WSI Classification</span>
-          <div class="pub-links"><a href="https://doi.org/10.3389/fmed.2025.1546452">DOI <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></div>
+          <div class="pub-links"><a href="https://doi.org/10.3389/fmed.2025.1546452" target="_blank" rel="noopener">DOI <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></div>
         </div>
       </li>
       <li class="nofig">
         <div class="pub-body"><span class="venue">ACM BCB'24</span><span class="t">MFMF: Multiple Foundation Model Fusion Networks for Whole Slide Image Classification</span>
-          <div class="pub-links"><a href="https://doi.org/10.1145/3698587.3701372">DOI <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></div>
+          <div class="pub-links"><a href="https://doi.org/10.1145/3698587.3701372" target="_blank" rel="noopener">DOI <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></div>
         </div>
       </li>
       <li>
-        <a class="fig" href="https://arxiv.org/html/2105.10843v2/attack-eps-converted-to.png" aria-label="View figure"><img src="https://arxiv.org/html/2105.10843v2/attack-eps-converted-to.png" alt="" loading="lazy" onerror="var l=this.closest('li');this.parentNode.remove();l.classList.add('nofig')"></a>
+        <a class="fig" href="https://arxiv.org/html/2105.10843v2/attack-eps-converted-to.png" aria-label="View figure" target="_blank" rel="noopener"><img src="https://arxiv.org/html/2105.10843v2/attack-eps-converted-to.png" alt="" loading="lazy" onerror="var l=this.closest('li');this.parentNode.remove();l.classList.add('nofig')"></a>
         <div class="pub-body"><span class="venue">ICCV'21</span><span class="t">Exploring Robustness of Unsupervised Domain Adaptation in Semantic Segmentation</span>
-          <div class="pub-links"><a href="https://doi.org/10.1109/ICCV48922.2021.00906">DOI <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a><a href="https://github.com/uta-smile/ASSUDA">Code <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></div>
+          <div class="pub-links"><a href="https://doi.org/10.1109/ICCV48922.2021.00906" target="_blank" rel="noopener">DOI <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a><a href="https://github.com/uta-smile/ASSUDA" target="_blank" rel="noopener">Code <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></div>
         </div>
       </li>
     </ul>
@@ -546,32 +571,31 @@ body.js:not([data-page="research"]) main > section.page{padding-top:44px}
     </p>
     <ul class="pubs">
       <li>
-        <a class="fig" href="https://arxiv.org/html/2511.09512v2/GenePheno_Figure_2.png" aria-label="View figure"><img src="https://arxiv.org/html/2511.09512v2/GenePheno_Figure_2.png" alt="" loading="lazy" onerror="var l=this.closest('li');this.parentNode.remove();l.classList.add('nofig')"></a>
+        <a class="fig" href="https://arxiv.org/html/2511.09512v2/GenePheno_Figure_2.png" aria-label="View figure" target="_blank" rel="noopener"><img src="https://arxiv.org/html/2511.09512v2/GenePheno_Figure_2.png" alt="" loading="lazy" onerror="var l=this.closest('li');this.parentNode.remove();l.classList.add('nofig')"></a>
         <div class="pub-body"><span class="venue">AAAI'26</span><span class="t">GenePheno: Interpretable Gene Knockout-Induced Phenotype Abnormality Prediction from Gene Sequences</span>
-          <div class="pub-links"><a href="https://arxiv.org/abs/2511.09512">arXiv <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></div>
+          <div class="pub-links"><a href="https://arxiv.org/abs/2511.09512" target="_blank" rel="noopener">arXiv <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></div>
         </div>
       </li>
       <li>
-        <a class="fig" href="https://arxiv.org/html/2501.01930v1/miao_main.png" aria-label="View figure"><img src="https://arxiv.org/html/2501.01930v1/miao_main.png" alt="" loading="lazy" onerror="var l=this.closest('li');this.parentNode.remove();l.classList.add('nofig')"></a>
+        <a class="fig" href="https://arxiv.org/html/2501.01930v1/miao_main.png" aria-label="View figure" target="_blank" rel="noopener"><img src="https://arxiv.org/html/2501.01930v1/miao_main.png" alt="" loading="lazy" onerror="var l=this.closest('li');this.parentNode.remove();l.classList.add('nofig')"></a>
         <div class="pub-body"><span class="venue">AAAI'25</span><span class="t">GoBERT: Gene Ontology Graph Informed BERT for Universal Gene Function Prediction</span>
-          <div class="pub-links"><a href="https://arxiv.org/abs/2501.01930">arXiv <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></div>
+          <div class="pub-links"><a href="https://arxiv.org/abs/2501.01930" target="_blank" rel="noopener">arXiv <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></div>
         </div>
       </li>
       <li>
-        <a class="fig" href="https://www.mdpi.com/biomedinformatics/biomedinformatics-04-00085/article_deploy/html/images/biomedinformatics-04-00085-g001.png" aria-label="View figure"><img src="https://www.mdpi.com/biomedinformatics/biomedinformatics-04-00085/article_deploy/html/images/biomedinformatics-04-00085-g001.png" alt="" loading="lazy" onerror="var l=this.closest('li');this.parentNode.remove();l.classList.add('nofig')"></a>
+        <a class="fig" href="https://www.mdpi.com/biomedinformatics/biomedinformatics-04-00085/article_deploy/html/images/biomedinformatics-04-00085-g001.png" aria-label="View figure" target="_blank" rel="noopener"><img src="https://www.mdpi.com/biomedinformatics/biomedinformatics-04-00085/article_deploy/html/images/biomedinformatics-04-00085-g001.png" alt="" loading="lazy" onerror="var l=this.closest('li');this.parentNode.remove();l.classList.add('nofig')"></a>
         <div class="pub-body"><span class="venue">BioMedInform.'24</span><span class="t">Advancing DNA Language Models through Motif-Oriented Pre-training with MoDNA</span>
-          <div class="pub-links"><a href="https://doi.org/10.3390/biomedinformatics4020085">DOI <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a><a href="https://github.com/uta-smile/MoDNA">Code <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></div>
+          <div class="pub-links"><a href="https://doi.org/10.3390/biomedinformatics4020085" target="_blank" rel="noopener">DOI <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a><a href="https://github.com/uta-smile/MoDNA" target="_blank" rel="noopener">Code <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></div>
         </div>
       </li>
-      <li>
-        <a class="fig" href="https://www.mdpi.com/biomedinformatics/biomedinformatics-04-00085/article_deploy/html/images/biomedinformatics-04-00085-g001.png" aria-label="View figure"><img src="https://www.mdpi.com/biomedinformatics/biomedinformatics-04-00085/article_deploy/html/images/biomedinformatics-04-00085-g001.png" alt="" loading="lazy" onerror="var l=this.closest('li');this.parentNode.remove();l.classList.add('nofig')"></a>
+      <li class="nofig">
         <div class="pub-body"><span class="venue">ACM BCB'22</span><span class="t">MoDNA: Motif-Oriented Pre-training for DNA Language Model</span>
-          <div class="pub-links"><a href="https://doi.org/10.1145/3535508.3545512">DOI <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a><a href="https://github.com/uta-smile/MoDNA">Code <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></div>
+          <div class="pub-links"><a href="https://doi.org/10.1145/3535508.3545512" target="_blank" rel="noopener">DOI <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a><a href="https://github.com/uta-smile/MoDNA" target="_blank" rel="noopener">Code <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></div>
         </div>
       </li>
       <li class="nofig">
         <div class="pub-body"><span class="venue">MICCAI'25</span><span class="t">HAGE: Hierarchical Alignment Gene-Enhanced Pathology Representation Learning with Spatial Transcriptomics</span>
-          <div class="pub-links"><a href="https://doi.org/10.1007/978-3-032-04927-8_22">DOI <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a><a href="https://github.com/uta-smile/gene_expression">Code <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></div>
+          <div class="pub-links"><a href="https://doi.org/10.1007/978-3-032-04927-8_22" target="_blank" rel="noopener">DOI <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a><a href="https://github.com/uta-smile/gene_expression" target="_blank" rel="noopener">Code <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></div>
         </div>
       </li>
     </ul>
@@ -584,44 +608,44 @@ body.js:not([data-page="research"]) main > section.page{padding-top:44px}
     </p>
     <ul class="pubs">
       <li>
-        <a class="fig" href="https://media.springernature.com/lw685/springer-static/image/art%3A10.1038%2Fs43018-025-01001-5/MediaObjects/43018_2025_1001_Fig1_HTML.png" aria-label="View figure"><img src="https://media.springernature.com/lw685/springer-static/image/art%3A10.1038%2Fs43018-025-01001-5/MediaObjects/43018_2025_1001_Fig1_HTML.png" alt="" loading="lazy" onerror="var l=this.closest('li');this.parentNode.remove();l.classList.add('nofig')"></a>
+        <a class="fig" href="https://media.springernature.com/lw685/springer-static/image/art%3A10.1038%2Fs43018-025-01001-5/MediaObjects/43018_2025_1001_Fig1_HTML.png" aria-label="View figure" target="_blank" rel="noopener"><img src="https://media.springernature.com/lw685/springer-static/image/art%3A10.1038%2Fs43018-025-01001-5/MediaObjects/43018_2025_1001_Fig1_HTML.png" alt="" loading="lazy" onerror="var l=this.closest('li');this.parentNode.remove();l.classList.add('nofig')"></a>
         <div class="pub-body"><span class="venue">Nat. Cancer'25</span><span class="t">Profiling Antigen Binding Affinity of B Cell Repertoires in Tumors by Deep Learning</span>
-          <div class="pub-links"><a href="https://doi.org/10.1038/s43018-025-01001-5">DOI <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></div>
+          <div class="pub-links"><a href="https://doi.org/10.1038/s43018-025-01001-5" target="_blank" rel="noopener">DOI <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></div>
         </div>
       </li>
       <li class="nofig">
         <div class="pub-body"><span class="venue">Brief. Bioinform.'24</span><span class="t">GTE: A Graph Learning Framework for Prediction of T-Cell Receptors and Epitopes Binding Specificity</span>
-          <div class="pub-links"><a href="https://doi.org/10.1093/bib/bbae343">DOI <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a><a href="https://github.com/uta-smile/GTE">Code <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></div>
+          <div class="pub-links"><a href="https://doi.org/10.1093/bib/bbae343" target="_blank" rel="noopener">DOI <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a><a href="https://github.com/uta-smile/GTE" target="_blank" rel="noopener">Code <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></div>
         </div>
       </li>
       <li class="nofig">
         <div class="pub-body"><span class="venue">ACM BCB'24</span><span class="t">AlphaEpi: Enhancing B Cell Epitope Prediction with AlphaFold 3</span>
-          <div class="pub-links"><a href="https://doi.org/10.1145/3698587.3701389">DOI <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a><a href="https://github.com/uta-smile/AlphaEpi">Code <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></div>
+          <div class="pub-links"><a href="https://doi.org/10.1145/3698587.3701389" target="_blank" rel="noopener">DOI <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a><a href="https://github.com/uta-smile/AlphaEpi" target="_blank" rel="noopener">Code <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></div>
         </div>
       </li>
       <li class="nofig">
         <div class="pub-body"><span class="venue">AAAI'22</span><span class="t">Self-supervised Pretraining for Protein Embeddings Using Tertiary Structures</span>
-          <div class="pub-links"><a href="https://doi.org/10.1609/aaai.v36i6.20636">DOI <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a><a href="https://github.com/yuzhiguo07/Protein-Structure-Embedding">Code <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></div>
+          <div class="pub-links"><a href="https://doi.org/10.1609/aaai.v36i6.20636" target="_blank" rel="noopener">DOI <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a><a href="https://github.com/yuzhiguo07/Protein-Structure-Embedding" target="_blank" rel="noopener">Code <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></div>
         </div>
       </li>
       <li class="nofig">
         <div class="pub-body"><span class="venue">IEEE BIBM'20</span><span class="t">Protein Ensemble Learning with Atrous Spatial Pyramid Networks for Secondary Structure Prediction</span>
-          <div class="pub-links"><a href="https://doi.org/10.1109/BIBM49941.2020.9313276">DOI <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a><a href="https://github.com/yuzhiguo07/Protein-EnsembleASP">Code <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></div>
+          <div class="pub-links"><a href="https://doi.org/10.1109/BIBM49941.2020.9313276" target="_blank" rel="noopener">DOI <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a><a href="https://github.com/yuzhiguo07/Protein-EnsembleASP" target="_blank" rel="noopener">Code <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></div>
         </div>
       </li>
       <li class="nofig">
         <div class="pub-body"><span class="venue">RECOMB'20</span><span class="t">Bagging MSA Learning: Enhancing Low-Quality PSSM with Deep Learning for Accurate Protein Structure Property Prediction</span>
-          <div class="pub-links"><a href="https://doi.org/10.1007/978-3-030-45257-5_6">DOI <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a><a href="https://github.com/yuzhiguo07/bagging-msa-learning">Code <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></div>
+          <div class="pub-links"><a href="https://doi.org/10.1007/978-3-030-45257-5_6" target="_blank" rel="noopener">DOI <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a><a href="https://github.com/yuzhiguo07/bagging-msa-learning" target="_blank" rel="noopener">Code <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></div>
         </div>
       </li>
       <li class="nofig">
         <div class="pub-body"><span class="venue">IEEE BIBM'20</span><span class="t">WeightAln: Weighted Homologous Alignment for Protein Structure Property Prediction</span>
-          <div class="pub-links"><a href="https://doi.org/10.1109/BIBM49941.2020.9313340">DOI <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></div>
+          <div class="pub-links"><a href="https://doi.org/10.1109/BIBM49941.2020.9313340" target="_blank" rel="noopener">DOI <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></div>
         </div>
       </li>
       <li class="nofig">
         <div class="pub-body"><span class="venue">J. Comput. Biol.'21</span><span class="t">EPTool: A New Enhancing PSSM Tool for Protein Secondary Structure Prediction</span>
-          <div class="pub-links"><a href="https://doi.org/10.1089/cmb.2020.0417">DOI <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a><a href="https://github.com/yuzhiguo07/EPTool">Code <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></div>
+          <div class="pub-links"><a href="https://doi.org/10.1089/cmb.2020.0417" target="_blank" rel="noopener">DOI <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a><a href="https://github.com/yuzhiguo07/EPTool" target="_blank" rel="noopener">Code <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></div>
         </div>
       </li>
     </ul>
@@ -635,34 +659,34 @@ body.js:not([data-page="research"]) main > section.page{padding-top:44px}
     <ul class="pubs">
       <li class="nofig">
         <div class="pub-body"><span class="venue">ACM BCB'19</span><span class="t">SMILES-BERT: Large Scale Unsupervised Pre-training for Molecular Property Prediction</span>
-          <div class="pub-links"><a href="https://doi.org/10.1145/3307339.3342186">DOI <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a><a href="https://github.com/uta-smile/SMILES-BERT">Code <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></div>
+          <div class="pub-links"><a href="https://doi.org/10.1145/3307339.3342186" target="_blank" rel="noopener">DOI <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a><a href="https://github.com/uta-smile/SMILES-BERT" target="_blank" rel="noopener">Code <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></div>
         </div>
       </li>
       <li>
-        <a class="fig" href="https://arxiv.org/html/2509.21971v2/framework.png" aria-label="View figure"><img src="https://arxiv.org/html/2509.21971v2/framework.png" alt="" loading="lazy" onerror="var l=this.closest('li');this.parentNode.remove();l.classList.add('nofig')"></a>
+        <a class="fig" href="https://arxiv.org/html/2509.21971v2/framework.png" aria-label="View figure" target="_blank" rel="noopener"><img src="https://arxiv.org/html/2509.21971v2/framework.png" alt="" loading="lazy" onerror="var l=this.closest('li');this.parentNode.remove();l.classList.add('nofig')"></a>
         <div class="pub-body"><span class="venue">ICLR'26</span><span class="t">GRAM-DTI: Adaptive Multimodal Representation Learning for Drug-Target Interaction Prediction</span>
-          <div class="pub-links"><a href="https://arxiv.org/abs/2509.21971">arXiv <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a><a href="https://github.com/uta-smile/GRAM-DTI">Code <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></div>
+          <div class="pub-links"><a href="https://arxiv.org/abs/2509.21971" target="_blank" rel="noopener">arXiv <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a><a href="https://github.com/uta-smile/GRAM-DTI" target="_blank" rel="noopener">Code <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></div>
         </div>
       </li>
       <li>
-        <a class="fig" href="https://arxiv.org/html/2506.21028v2/1.png" aria-label="View figure"><img src="https://arxiv.org/html/2506.21028v2/1.png" alt="" loading="lazy" onerror="var l=this.closest('li');this.parentNode.remove();l.classList.add('nofig')"></a>
+        <a class="fig" href="https://arxiv.org/html/2506.21028v2/1.png" aria-label="View figure" target="_blank" rel="noopener"><img src="https://arxiv.org/html/2506.21028v2/1.png" alt="" loading="lazy" onerror="var l=this.closest('li');this.parentNode.remove();l.classList.add('nofig')"></a>
         <div class="pub-body"><span class="venue">NeurIPS'25</span><span class="t">TRIDENT: Tri-Modal Molecular Representation Learning with Taxonomic Annotations and Local Correspondence</span>
-          <div class="pub-links"><a href="https://arxiv.org/abs/2506.21028">arXiv <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a><a href="https://github.com/uta-smile/TRIDENT">Code <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></div>
+          <div class="pub-links"><a href="https://arxiv.org/abs/2506.21028" target="_blank" rel="noopener">arXiv <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a><a href="https://github.com/uta-smile/TRIDENT" target="_blank" rel="noopener">Code <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></div>
         </div>
       </li>
       <li class="nofig">
         <div class="pub-body"><span class="venue">J. Comput. Biol.'24</span><span class="t">Towards Robust Self-training for Molecular Biology Prediction Tasks</span>
-          <div class="pub-links"><a href="https://doi.org/10.1089/cmb.2023.0187">DOI <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a><a href="https://github.com/uta-smile/robust_self_training">Code <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></div>
+          <div class="pub-links"><a href="https://doi.org/10.1089/cmb.2023.0187" target="_blank" rel="noopener">DOI <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a><a href="https://github.com/uta-smile/robust_self_training" target="_blank" rel="noopener">Code <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></div>
         </div>
       </li>
       <li class="nofig">
         <div class="pub-body"><span class="venue">IEEE BIBM'21</span><span class="t">Gradient-Norm Based Attentive Loss for Molecular Property Prediction</span>
-          <div class="pub-links"><a href="https://doi.org/10.1109/BIBM52615.2021.9669671">DOI <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></div>
+          <div class="pub-links"><a href="https://doi.org/10.1109/BIBM52615.2021.9669671" target="_blank" rel="noopener">DOI <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></div>
         </div>
       </li>
       <li class="nofig">
         <div class="pub-body"><span class="venue">IEEE BIBM'20</span><span class="t">Improving Molecular Property Prediction on Limited Data with Deep Multi-Label Learning</span>
-          <div class="pub-links"><a href="https://doi.org/10.1109/BIBM49941.2020.9313553">DOI <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></div>
+          <div class="pub-links"><a href="https://doi.org/10.1109/BIBM49941.2020.9313553" target="_blank" rel="noopener">DOI <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></div>
         </div>
       </li>
       <li class="nofig">
@@ -693,12 +717,10 @@ body.js:not([data-page="research"]) main > section.page{padding-top:44px}
         <span class="tag">Fukui functions</span><span class="tag">PDOS</span>
       </div>
       <div class="acts">
-        <!-- ONEDRIVE: quantum_array_catalog_en.html -->
-        <a href="https://ksuprod-my.sharepoint.com/:u:/r/personal/yguo30_kent_edu/Documents/Kent/Projects-web/Quantum-alphaepi/quantum_array_catalog_en.html?d=wd9307c88617e4330bc065a6e04fecdbb&amp;csf=1&amp;web=1&amp;e=mA1bKx">Data array catalog <span class="ext">↗ OneDrive</span></a>
-        <!-- ONEDRIVE: quantum_array_catalog_zh.html -->
-        <a href="https://ksuprod-my.sharepoint.com/:u:/r/personal/yguo30_kent_edu/Documents/Kent/Projects-web/Quantum-alphaepi/quantum_array_catalog_zh.html?d=wf17a330f35d04e27b3781af19a9f162d&amp;csf=1&amp;web=1&amp;e=XiJHZH">数据清单（中文） <span class="ext">↗ OneDrive</span></a>
-        <!-- ONEDRIVE: alphaepi_quantum_log.html -->
-        <a href="https://ksuprod-my.sharepoint.com/:u:/r/personal/yguo30_kent_edu/Documents/Kent/Projects-web/Quantum-alphaepi/alphaepi_quantum_log.html?d=wcc90af41527b4008924c8e765c1ff1f4&amp;csf=1&amp;web=1&amp;e=eKynb4">Progress report <span class="ext">↗ OneDrive</span></a>
+        <!-- ONEDRIVE: quantum_array_catalog.html (EN/ZH in one file) -->
+        <a href="https://ksuprod-my.sharepoint.com/:u:/r/personal/yguo30_kent_edu/Documents/Kent/Projects-web/Quantum-alphaepi/quantum_array_catalog.html?d=w43942114b9ce4bb5b5b98d76b216d70f&amp;csf=1&amp;web=1&amp;e=zi8P7w" target="_blank" rel="noopener">Data Array Catalog EN/ZH <span class="ext">↗ OneDrive</span></a>
+        <!-- ONEDRIVE: alphaepi_quantum_log.html (EN/ZH in one file) -->
+        <a href="https://ksuprod-my.sharepoint.com/:u:/r/personal/yguo30_kent_edu/Documents/Kent/Projects-web/Quantum-alphaepi/alphaepi_quantum_log.html?d=wcc90af41527b4008924c8e765c1ff1f4&amp;csf=1&amp;web=1&amp;e=6brF52" target="_blank" rel="noopener">Progress Report EN/ZH <span class="ext">↗ OneDrive</span></a>
         <!-- ONEDRIVE: feature validation report, fill in when ready -->
         <a href="#">Feature validation <span class="ext">↗ OneDrive</span></a>
       </div>
@@ -712,11 +734,12 @@ body.js:not([data-page="research"]) main > section.page{padding-top:44px}
       <p>
            Integrating multimodal gene representations for predicting transcriptional responses to single and combinatorial gene perturbations.
       </p>
+      <div class="tags">
+        <span class="tag">CRISPR perturbation</span><span class="tag">Retrieval</span><span class="tag">Replogle</span><span class="tag">Unseen genes</span>
+      </div>
       <div class="acts">
-        <!-- ONEDRIVE: progress_report_v8.html -->
-        <a href="https://ksuprod-my.sharepoint.com/:u:/r/personal/yguo30_kent_edu/Documents/Kent/Projects-web/Gene_Perturbation/retrieval_progress_report_bilingual_v8.html?d=w50e6572695d243229fa150a14ebc8ccb&csf=1&web=1&e=Zk9HW7">Progress Report EN/ZH<span class="ext">↗ OneDrive</span></a>
-        <!-- ONEDRIVE -->
-        <a href="#">Progress notes <span class="ext">↗ OneDrive</span></a>
+        <!-- ONEDRIVE: gene_perturbation_progress_report.html (EN/ZH in one file) -->
+        <a href="https://ksuprod-my.sharepoint.com/:u:/r/personal/yguo30_kent_edu/Documents/Kent/Projects-web/Gene_Perturbation/gene_perturbation_progress_report.html?d=w7454c42fc34e4c2697df92fead522387&amp;csf=1&amp;web=1&amp;e=ClZZD8" target="_blank" rel="noopener">Progress Report EN/ZH <span class="ext">↗ OneDrive</span></a>
       </div>
     </article>
 
@@ -728,11 +751,12 @@ body.js:not([data-page="research"]) main > section.page{padding-top:44px}
       <p>
            Learning transferable molecular relationships from biological pathway graphs for downstream interaction prediction across pathways and databases.
       </p>
+      <div class="tags">
+        <span class="tag">Pathway graphs</span><span class="tag">Next-KO prediction</span><span class="tag">Leakage-free splits</span>
+      </div>
       <div class="acts">
-        <!-- ONEDRIVE: kegg_report_10_13.html -->
-        <a href="https://ksuprod-my.sharepoint.com/:u:/r/personal/yguo30_kent_edu/Documents/Kent/Projects-web/Kegg%20Pathway/progress_report_2026-10-13%20(9).html?d=w99513d8c2a6849c6897380c1f61f79c1&csf=1&web=1&e=xUeiM7">Progress Report EN/ZH<span class="ext">↗ OneDrive</span></a>
-        <!-- ONEDRIVE -->
-        <a href="#">Progress notes <span class="ext">↗ OneDrive</span></a>
+        <!-- ONEDRIVE: kegg_progress_report.html (EN/ZH in one file) -->
+        <a href="https://ksuprod-my.sharepoint.com/:u:/r/personal/yguo30_kent_edu/Documents/Kent/Projects-web/Kegg%20Pathway/kegg_progress_report.html?d=w23b895a698424eb0a8befa23a356510b&amp;csf=1&amp;web=1&amp;e=35DTxt" target="_blank" rel="noopener">Progress Report EN/ZH <span class="ext">↗ OneDrive</span></a>
       </div>
     </article>
 
@@ -752,10 +776,8 @@ body.js:not([data-page="research"]) main > section.page{padding-top:44px}
         <span class="tag">ALFRED</span><span class="tag">Missing modality</span>
       </div>
       <div class="acts">
-        <!-- ONEDRIVE: report_en.html -->
-        <a href="https://ksuprod-my.sharepoint.com/:u:/r/personal/yguo30_kent_edu/Documents/Kent/Projects-web/World-Model/report_en.html?d=wc0862001caea462abc32d50a598393a3&csf=1&web=1&e=9F4u5F">Preliminary report <span class="ext">↗ OneDrive</span></a>
-        <!-- ONEDRIVE: report_zh.html --> 
-        <a href="https://ksuprod-my.sharepoint.com/:u:/r/personal/yguo30_kent_edu/Documents/Kent/Projects-web/World-Model/report_zh.html?d=w2903286d6b0441ddb1df999baead3cdf&csf=1&web=1&e=Kz1a5J">初步报告（中文） <span class="ext">↗ OneDrive</span></a>
+        <!-- ONEDRIVE: world_model_report.html (EN/ZH in one file) -->
+        <a href="https://ksuprod-my.sharepoint.com/:u:/r/personal/yguo30_kent_edu/Documents/Kent/Projects-web/World-Model/world_model_report.html?d=w2159d37dc8d64ce68f4e05981662ee46&amp;csf=1&amp;web=1&amp;e=gI7wVa" target="_blank" rel="noopener">Preliminary Report EN/ZH <span class="ext">↗ OneDrive</span></a>
       </div>
     </article>
 
@@ -776,10 +798,8 @@ body.js:not([data-page="research"]) main > section.page{padding-top:44px}
         <span class="tag">Alzheimer's</span><span class="tag">Missing modality</span>
       </div>
       <div class="acts">
-        <!-- ONEDRIVE: ADNI_Report_EN.html -->
-        <a href="https://ksuprod-my.sharepoint.com/:u:/r/personal/yguo30_kent_edu/Documents/Kent/Projects-web/Brain-BRF/ADNI_Report_EN.html?d=wf88b361439454fff9ef4d6d74d4ffc5b&amp;csf=1&amp;web=1&amp;e=dyqDnR">Preliminary report <span class="ext">↗ OneDrive</span></a>
-        <!-- ONEDRIVE: ADNI_Report_ZH.html -->
-        <a href="https://ksuprod-my.sharepoint.com/:u:/r/personal/yguo30_kent_edu/Documents/Kent/Projects-web/Brain-BRF/ADNI_Report_ZH.html?d=w892752ec698c4f06beed2d917182539c&amp;csf=1&amp;web=1&amp;e=hZ4vuR">初步报告（中文） <span class="ext">↗ OneDrive</span></a>
+        <!-- ONEDRIVE: adni_report.html (EN/ZH in one file) -->
+        <a href="https://ksuprod-my.sharepoint.com/:u:/r/personal/yguo30_kent_edu/Documents/Kent/Projects-web/Brain-BRF/adni_report.html?d=w67eca875b55145e392eeaecba19bfd33&amp;csf=1&amp;web=1&amp;e=4sR9NR" target="_blank" rel="noopener">Preliminary Report EN/ZH <span class="ext">↗ OneDrive</span></a>
       </div>
     </article>
 
@@ -804,8 +824,8 @@ body.js:not([data-page="research"]) main > section.page{padding-top:44px}
       <p class="p-aff">Kent State University</p>
       <a class="p-mail" href="mailto:yguo30@kent.edu"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>yguo30@kent.edu</a>
       <div class="btns">
-        <a class="btn btn-primary" href="https://yuzhiguo07.github.io/">Homepage <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a>
-        <a class="btn btn-ghost" href="https://scholar.google.com/citations?user=UNgRbboAAAAJ&amp;hl=en">Google Scholar <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a>
+        <a class="btn btn-primary" href="https://yuzhiguo07.github.io/" target="_blank" rel="noopener">Homepage <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a>
+        <a class="btn btn-ghost" href="https://scholar.google.com/citations?user=UNgRbboAAAAJ&amp;hl=en" target="_blank" rel="noopener">Google Scholar <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a>
       </div>
     </div>
   </article>
@@ -819,7 +839,7 @@ body.js:not([data-page="research"]) main > section.page{padding-top:44px}
       <p class="p-title">Ph.D. Student in Computer Science <span class="p-dot">·</span> <span class="p-since">Since Fall 2026</span></p>
       <a class="p-mail" href="mailto:hyang20@kent.edu"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>hyang20@kent.edu</a>
       <div class="btns">
-        <a class="btn btn-primary" href="https://hongyuyang9.github.io/">Homepage <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a>
+        <a class="btn btn-primary" href="https://hongyuyang9.github.io/" target="_blank" rel="noopener">Homepage <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a>
       </div>
     </div>
   </article>
@@ -836,7 +856,7 @@ body.js:not([data-page="research"]) main > section.page{padding-top:44px}
       medicine. If our work sounds exciting to you, we would love to hear from you.
     </p>
     <div class="acts">
-      <a href="https://yuzhiguo07.github.io/">Get in touch via PI Homepage</a>
+      <a href="https://yuzhiguo07.github.io/" target="_blank" rel="noopener">Get in touch via PI Homepage</a>
     </div>
   </div>
 </section>
@@ -856,7 +876,7 @@ body.js:not([data-page="research"]) main > section.page{padding-top:44px}
       </div>
       <div class="c-row">
         <dt>Online</dt>
-        <dd><a href="https://github.com/Kent-AI-Lab">github.com/Kent-AI-Lab</a><br><a href="https://yuzhiguo07.github.io/">PI Homepage</a></dd>
+        <dd><a href="https://github.com/Kent-AI-Lab" target="_blank" rel="noopener">github.com/Kent-AI-Lab</a><br><a href="https://yuzhiguo07.github.io/" target="_blank" rel="noopener">PI Homepage</a></dd>
       </div>
       <div class="c-row">
         <dt>Students</dt>
@@ -865,7 +885,7 @@ body.js:not([data-page="research"]) main > section.page{padding-top:44px}
     </dl>
     <figure class="map">
       <iframe title="Map: Mathematical Sciences Building, Kent State University" src="https://maps.google.com/maps?q=41.1449889,-81.3416480&amp;z=17&amp;hl=en&amp;output=embed" loading="lazy" referrerpolicy="no-referrer-when-downgrade" allowfullscreen></iframe>
-      <figcaption>Mathematical Sciences Building (MSB), Kent State University <a href="https://www.google.com/maps/search/?api=1&amp;query=41.1449889%2C-81.3416480">Open in Google Maps <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></figcaption>
+      <figcaption>Mathematical Sciences Building (MSB), Kent State University <a href="https://www.google.com/maps/search/?api=1&amp;query=41.1449889%2C-81.3416480" target="_blank" rel="noopener">Open in Google Maps <svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 17 17 7M8 7h9v9"/></svg></a></figcaption>
     </figure>
   </div>
 </section>
@@ -875,7 +895,7 @@ body.js:not([data-page="research"]) main > section.page{padding-top:44px}
 
 <footer class="site-foot">
 <div class="wrap foot-in">
-  <span class="foot-left"><span>Last updated November 2026</span><span aria-hidden="true">·</span><a href="https://github.com/Kent-AI-Lab"><svg class="ico" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.53-1.33-1.28-1.69-1.28-1.69-1.05-.71.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.68 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.41-2.69 5.38-5.25 5.67.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5Z"/></svg>github.com/Kent-AI-Lab</a></span>
+  <span class="foot-left"><span>Last updated November 2026</span><span aria-hidden="true">·</span><a href="https://github.com/Kent-AI-Lab" target="_blank" rel="noopener"><svg class="ico" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .5a11.5 11.5 0 0 0-3.64 22.41c.58.1.79-.25.79-.56v-2c-3.2.7-3.88-1.37-3.88-1.37-.53-1.33-1.28-1.69-1.28-1.69-1.05-.71.08-.7.08-.7 1.16.08 1.77 1.19 1.77 1.19 1.03 1.77 2.7 1.26 3.36.96.1-.75.4-1.26.73-1.55-2.55-.29-5.24-1.28-5.24-5.68 0-1.26.45-2.28 1.19-3.09-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.17 1.18a11 11 0 0 1 5.77 0c2.2-1.49 3.17-1.18 3.17-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.83 1.19 3.09 0 4.41-2.69 5.38-5.25 5.67.41.36.78 1.06.78 2.14v3.17c0 .31.21.67.8.56A11.5 11.5 0 0 0 12 .5Z"/></svg>github.com/Kent-AI-Lab</a></span>
   <a href="mailto:yguo30@kent.edu"><svg class="ico" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>yguo30@kent.edu</a>
 </div>
 </footer>
@@ -925,6 +945,51 @@ body.js:not([data-page="research"]) main > section.page{padding-top:44px}
   window.addEventListener("scroll",function(){if(!tick){tick=true;requestAnimationFrame(update)}},{passive:true});
   window.addEventListener("resize",measure); window.addEventListener("hashchange",function(){setTimeout(update,0)});
   measure();
+  // M45 and the Big Dipper get a random spot on every visit: anywhere in the masthead
+  // that doesn't touch the title / PI line / intro text, the rising sun, or each other
+  var hero=document.querySelector("header.hero"), placed=false;
+  function textRect(el){var r=document.createRange(); r.selectNodeContents(el); return r.getBoundingClientRect()}
+  function overlaps(a,b){return a.l<b.r && a.r>b.l && a.t<b.b && a.b>b.t}
+  function hitsCircle(a,c){var x=Math.max(a.l,Math.min(c.x,a.r)), y=Math.max(a.t,Math.min(c.y,a.b)); return Math.hypot(x-c.x,y-c.y)<c.r}
+  function obstacles(){ var H=hero.getBoundingClientRect(), pad=22, rs=[];
+    hero.querySelectorAll(".hero-in h1, .hero-pi, .role").forEach(function(e){var r=textRect(e);
+      rs.push({l:r.left-H.left-pad,r:r.right-H.left+pad,t:r.top-H.top-pad,b:r.bottom-H.top+pad})});
+    var o=hero.querySelector(".sun-occlude"), circ=null;
+    if(o){var b=o.getBoundingClientRect(); circ={x:(b.left+b.right)/2-H.left,y:(b.top+b.bottom)/2-H.top,r:b.width/2+60}}
+    return {W:H.width,H:H.height,rects:rs,circ:circ} }
+  function fits(box,ob,others){ var m=14;
+    if(box.l<m||box.t<m||box.r>ob.W-m||box.b>ob.H-m) return false;
+    for(var i=0;i<ob.rects.length;i++) if(overlaps(box,ob.rects[i])) return false;
+    if(ob.circ && hitsCircle(box,ob.circ)) return false;
+    for(var j=0;j<others.length;j++) if(overlaps(box,others[j])) return false;
+    return true }
+  function boxOf(el){var H=hero.getBoundingClientRect(), b=el.getBoundingClientRect(); return {l:b.left-H.left,t:b.top-H.top,r:b.right-H.left,b:b.bottom-H.top}}
+  function placeSky(force){
+    if(!hero || !hero.getBoundingClientRect().width) return;
+    var ob=obstacles(), els=[document.querySelector(".dipper"),document.querySelector(".m45-photo")], done=[];
+    els.forEach(function(el){
+      if(!el || getComputedStyle(el).display==="none") return;
+      var rb=el.getBoundingClientRect(), w=rb.width, h=rb.height || Math.round(w*.72);
+      if(!w) return;
+      if(!force && placed){ var cur=boxOf(el); if(fits(cur,ob,done)){done.push(cur);return} }
+      for(var k=0;k<300;k++){
+        var x=Math.random()*(ob.W-w), y=Math.random()*(ob.H-h), box={l:x,t:y,r:x+w,b:y+h};
+        if(fits(box,ob,done)){ el.style.left=x+"px"; el.style.top=y+"px"; el.style.right="auto"; el.style.bottom="auto"; done.push(box); return }
+      }
+      done.push(boxOf(el));   // no free spot found: keep the default CSS position
+    });
+    placed=true; }
+  placeSky(true); setTimeout(function(){ if(!placed) placeSky(true) },0);
+  var rz; window.addEventListener("resize",function(){clearTimeout(rz); rz=setTimeout(function(){placeSky(false); clearDipper()},150)});
+  window.addEventListener("load",function(){placeSky(false); clearDipper()});
+  ["hashchange","popstate","click"].forEach(function(ev){window.addEventListener(ev,function(){setTimeout(function(){ if(!placed) placeSky(true); else placeSky(false) },0)})});
+  // keep the Big Dipper's pattern clean: hide any background star that lands in (or right next to) its box
+  var dip=document.querySelector(".dipper"), field=[].slice.call(document.querySelectorAll(".sky .st"));
+  function clearDipper(){ if(!dip) return; var d=dip.getBoundingClientRect(), pad=26; if(!d.width){ field.forEach(function(c){c.style.display=""}); return; }
+    field.forEach(function(c){ c.style.display=""; var b=c.getBoundingClientRect(), x=(b.left+b.right)/2, y=(b.top+b.bottom)/2;
+      if(x>d.left-pad && x<d.right+pad && y>d.top-pad && y<d.bottom+pad) c.style.display="none"; });}
+  window.addEventListener("resize",clearDipper); ["hashchange","popstate","click"].forEach(function(ev){window.addEventListener(ev,function(){setTimeout(clearDipper,0)})});
+  clearDipper(); setTimeout(clearDipper,0); window.addEventListener("load",clearDipper);
   // brand → home page with a clean URL (no #research)
   document.querySelector(".brand").addEventListener("click",function(e){
     e.preventDefault();
