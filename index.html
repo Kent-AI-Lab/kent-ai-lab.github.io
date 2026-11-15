@@ -274,15 +274,16 @@ body.js:not([data-page="research"]) main > section.page{padding-top:44px}
   background:linear-gradient(180deg,var(--surface-2),var(--surface));border-radius:18px;padding:28px}
 .profile .photo{display:block;width:280px;height:280px;object-fit:cover;object-position:center top;
   border-radius:14px;background:var(--surface-3);box-shadow:var(--shadow)}
-.profile.student{padding:22px 26px;gap:32px}
-.profile.student .photo{width:170px;height:170px;border-radius:12px}
+/* all profile cards share one size (PI, students, mascot) */
+.profile{padding:22px 26px;gap:32px}
+.profile .photo{width:170px;height:170px;border-radius:12px}
 .profile.pet .photo{object-position:50% 30%}
 .profile h3{font-family:var(--font-serif);font-size:36px;line-height:1.12;font-weight:600;letter-spacing:-.016em;margin:0 0 10px}
-.profile.student h3{font-size:25px;margin-bottom:6px}
-.profile.student .p-title{font-size:16px}
-.profile.student .p-aff{font-size:15px}
-.profile.student .p-mail{font-size:13.5px;margin-top:12px}
-.profile.student .btns{margin-top:16px}
+.profile h3{font-size:25px;margin-bottom:6px}
+.profile .p-title{font-size:16px}
+.profile .p-aff{font-size:15px}
+.profile .p-mail{font-size:13.5px;margin-top:12px}
+.profile .btns{margin-top:16px}
 .p-title{font-size:18px;margin:0;color:var(--fg)}
 .p-aff{font-size:16.5px;margin:2px 0 0;color:var(--muted)}
 .p-dot{color:var(--num);margin:0 4px}
@@ -369,8 +370,8 @@ body.js:not([data-page="research"]) main > section.page{padding-top:44px}
   .pub-links{margin-top:12px}
   .card{padding:20px 20px 18px}
   .profile{grid-template-columns:minmax(0,1fr);gap:22px;padding:20px}
-  .profile .photo,.profile.student .photo{width:100%;height:auto;aspect-ratio:1/1;max-width:300px}
-  .profile h3{font-size:30px}
+  .profile .photo{width:100%;height:auto;aspect-ratio:1/1;max-width:220px}
+  .profile h3{font-size:24px}
 }
 </style>
 </head>
