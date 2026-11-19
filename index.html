@@ -20,9 +20,8 @@
      5. Work-in-progress cards → search "EDIT:project", copy a whole
                                  <article class="card"> block
      6. Fill a OneDrive link   → search "ONEDRIVE", replace href="#"
-     7. Team                   → search "EDIT:team". Photos load live:
-                                 PI from his homepage, students from
-                                 https://github.com/<username>.png
+     7. Team                   → search "EDIT:team". PI photo loads from his
+                                 homepage; other photos live in assets/
      Save, push to GitHub, live in a minute or two.
      =================================================================== -->
 
@@ -856,9 +855,9 @@ body.js:not([data-page="research"]) main > section.page{padding-top:44px}
   </article>
 
   <h3 class="group-title">Ph.D. Students</h3>
-  <!-- copy this whole article block to add a student; photo = https://github.com/<username>.png -->
+  <!-- copy this whole article block to add a student; put the photo in assets/ and point src at it -->
   <article class="profile student">
-    <img class="photo" src="https://github.com/hongyuyang9.png?size=460" alt="Hongyu Yang" loading="lazy">
+    <img class="photo" src="assets/hongyu-yang.jpg" alt="Hongyu Yang" loading="lazy">
     <div>
       <h3>Hongyu Yang</h3>
       <p class="p-title">Ph.D. Student in Computer Science <span class="p-dot">·</span> <span class="p-since">Since Fall 2026</span></p>
